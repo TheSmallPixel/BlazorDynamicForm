@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicFormGenerator</PackageProjectUrl>
-	<VersionPrefix>1.0.1</VersionPrefix>
+    <PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicForm</PackageProjectUrl>
+	<VersionPrefix>1.0.4</VersionPrefix>
     <PackageTags>Blazor;Dynamic;Form;Validation;</PackageTags>
     <RepositoryUrl>https://github.com/TheSmallPixel</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
