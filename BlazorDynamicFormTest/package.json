@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@syncfusion/blazor-themes": "^21.2.10"
+  }
+}

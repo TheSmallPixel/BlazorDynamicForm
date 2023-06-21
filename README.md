@@ -1,1 +1,1 @@
-# BlazorDynamicForm
+# BlazorDynamicFormGenerator
