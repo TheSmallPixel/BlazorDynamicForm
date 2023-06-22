@@ -3,8 +3,7 @@ using BlazorDynamicFormSyncfusion;
 using BlazorDynamicFormTest.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Syncfusion.Blazor;
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjExNDAwNUAzMjMxMmUzMjJlMzVaRzJOVHhUSWcvNjRibTZsVW1IK2xuTEp3SVQ4elAxaFFDcWI4dk1PcWFnPQ==");
+using Syncfusion.Blazor;                                                                                                                                     
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
