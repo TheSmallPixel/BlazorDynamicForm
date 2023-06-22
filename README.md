@@ -20,9 +20,9 @@ dotnet add package BlazorDynamicFormSyncfusion --version 1.0.4
 
 Packet Manager
 ```bash
-NuGet\Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.4
-NuGet\Install-Package BlazorDynamicFormGenerator -Version 1.0.4
-NuGet\Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
+Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.4
+Install-Package BlazorDynamicFormGenerator -Version 1.0.4
+Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
 ```
 ## Packages
 - BlazorDynamicFormDataAnnotation: It takes care of generating the forms for blazor.
