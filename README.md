@@ -73,28 +73,28 @@ Refer to the included `Test` class in the `OnInitialized()` method for an exampl
 ```csharp
     public class Test
     {
-        [Required,Display(Name = "First Name"),DataType(DataType.Text)]
+        [Required, Display(Name = "First Name"), DataType(DataType.Text)]
         public string FirstName { get; set; }
 
-        [Display(Name = "Last Name"),DataType(DataType.Text)]
+        [Display(Name = "Last Name"), DataType(DataType.Text)]
         public string LastName { get; set; }
 
-        [Required,Display(Name = "Email Address"),DataType(DataType.EmailAddress),EmailAddress]
+        [Required, Display(Name = "Email Address"), DataType(DataType.EmailAddress), EmailAddress]
         public string Email { get; set; }
 
-        [Required,Display(Name = "PhoneNumber"),DataType(DataType.PhoneNumber),Phone]
+        [Required, Display(Name = "PhoneNumber"), DataType(DataType.PhoneNumber), Phone]
         public string PhoneNumber { get; set; }
 
-        [Required,Display(Name = "Date of Birth"),DataType(DataType.DateTime)]
+        [Required, Display(Name = "Date of Birth"), DataType(DataType.DateTime)]
         public DateTime? DOB { get; set; }
 
-        [Required,DataType(DataType.Duration),Display(Name = "Total Experience"),Range(0, 20, ErrorMessage = "The Experience range should be 0 to 20"),DefaultValue(10.0)]
+        [Required, DataType(DataType.Duration), Display(Name = "Total Experience"), Range(0, 20, ErrorMessage = "The Experience range should be 0 to 20"), DefaultValue(10.0)]
         public decimal TotalExperience { get; set; } = 22;
 
-        [Required,Display(Name = "Select a Country"),DataType("DropdownList"),LinkedAttribute(typeof(int))]
+        [Required, Display(Name = "Select a Country"), DataType("DropdownList"), LinkedAttribute(typeof(int))]
         public string Country { get; set; }
 
-        [Required,DataType(DataType.MultilineText),Display(Name = "Address"),DefaultValue("piazza 24 maggio"),BlazorDynamicFormGenerator.ReadOnly]
+        [Required, DataType(DataType.MultilineText), Display(Name = "Address"), DefaultValue("piazza 24 maggio"), BlazorDynamicFormGenerator.ReadOnly]
         public string Address { get; set; }
     }
 ```
