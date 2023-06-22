@@ -113,7 +113,7 @@ Get the result direclty as JSON:
  void OnValidResult(string data){..}
 ```
 
-Result
+Result:
 ```json
 {"FirstName":"Lorenzo","LastName":null,"Email":"l@hoy.com","PhoneNumber":"331","DOB":"2023-06-22T00:00:00+02:00","TotalExperience":10.0,"Country":"id","Address":"piazza 24 maggio"}
 ```
@@ -123,10 +123,35 @@ Showcase with Boostrap and Syncfusion
 |:---:|:---:|
 | ![image](https://github.com/TheSmallPixel/BlazorDynamicForm/assets/25280244/8cfc9458-681b-49ce-a2e6-0cebffe7364e) | ![image](https://github.com/TheSmallPixel/BlazorDynamicForm/assets/25280244/f802568d-ebde-4e03-8bd2-30e5cc34804b) |
 
+## Data Providers
+
+The `AddDataProvider` method is used to set up a source of data for certain elements in the form, particularly for elements like dropdown lists or combo boxes that require a list of options to present to the user.
+
+This method accepts a delegate that can retrieve or generate the data required for a given attribute and name. The method should return the data in a format that can be used to populate the dropdown list or other similar components.
+
+Here's how it is used in the given code example:
+
+```csharp
+builder.Services.AddBlazorDynamicForm()
+    .AddDataProvider((attribute, name) =>
+    {
+        var data = new List<FormVar>();
+        data.Add(new FormVar() { Id = "id", Name = "Cipolle" });
+        return data;
+    })
+    .SyncfusionForm();
+```
+
+In this example, `AddDataProvider` is being used to provide a list of `FormVar` objects whenever needed. In a more realistic scenario, the delegate might retrieve the data from a database or an API depending on the attribute and name provided.
+
+This makes `AddDataProvider` a powerful tool for dynamic form generation, as it allows you to tailor the data shown in each field based on the requirements of that field.
+
 ## Create a Custom Integration
 SyncfusionIntegration is a static class that serves as an example of how to extend the Dynamic Form Configuration to integrate custom data types and components.
 
 The SyncfusionForm method of this class modifies the form's configuration, adding a series of Syncfusion Blazor components with their respective data types. The attributes of these components are set through various builder functions.
+
+
 
 ```csharp
 public static class SyncfusionIntegration
@@ -172,6 +197,46 @@ public static class SyncfusionIntegration
     }
 ```
 
+## Add Method
+
+The `Add` method is used to map a data annotation attribute to a Blazor component. This method accepts the type of the component, the DataType for which the component should be used, and an optional configuration delegate.
+
+Here's an example of how it is used:
+
+```csharp
+config.Add<SfTextBox, string>(DataType.Text, (builder, sequence, attribute) =>
+{
+    builder.AddAttribute(sequence++, "Readonly", attribute.ReadOnly);
+});
+```
+
+## AddCustom Method
+
+The `AddCustom` method allows for more advanced configurations. It is used when you want to map a custom data annotation to a specific Blazor component. This method also accepts the type of the component, the custom data annotation name, and a configuration delegate.
+
+Here's an example:
+
+```csharp
+config.AddCustom<SfDropDownList<string, FormVar>, string>("DropdownList", (builder, sequence, attribute) =>
+{
+    var linked = attribute.ValidationRules.OfType<LinkedAttribute>().FirstOrDefault();
+    if (linked is not null)
+        builder.AddAttribute(sequence++, "DataSource", config.DataSource(linked, attribute.Name));
+    builder.AddAttribute(sequence++, "ChildContent", (RenderFragment)((builder2) =>
+    {
+        builder2.AddMarkupContent(0, "\r\n");
+        builder2.OpenComponent<DropDownListFieldSettings>(1);
+        builder2.AddAttribute(2, "Value", "Id");
+        builder2.AddAttribute(3, "Text", "Name");
+        builder2.CloseComponent();
+        builder2.AddMarkupContent(4, "\r\n");
+    }));
+});
+```
+
+In the above example, the `AddCustom` method maps a custom data annotation named "DropdownList" to a `SfDropDownList` component. The configuration delegate is used to configure the `DataSource` and `ChildContent` attributes of the `SfDropDownList` component.
+
+These two methods are very powerful as they give you the ability to customize the way your forms work with different data types and annotations, leveraging the variety of components provided by Syncfusion Blazor.
 
 ## Contributing
 
