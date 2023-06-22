@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicForm</PackageProjectUrl>
-	<VersionPrefix>1.0.4</VersionPrefix>
+	<VersionPrefix>1.0.5</VersionPrefix>
     <PackageTags>Blazor;Dynamic;Form;Syncfusion;Validation;</PackageTags>
     <RepositoryUrl>https://github.com/TheSmallPixel</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <PackageReference Include="BlazorDynamicFormDataAnnotation" Version="1.0.4" />
+    <PackageReference Include="BlazorDynamicFormDataAnnotation" Version="1.0.5" />
   </ItemGroup>
     
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">

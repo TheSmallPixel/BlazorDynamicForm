@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicForm</PackageProjectUrl>
-	<VersionPrefix>1.0.4</VersionPrefix>
+	<VersionPrefix>1.0.5</VersionPrefix>
     <PackageTags>Blazor;Dynamic;Form;Data;Annotation;</PackageTags>
     <RepositoryUrl>https://github.com/TheSmallPixel</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -36,10 +36,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.15" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="21.2.10" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-	<PackageReference Include="BlazorDynamicFormGenerator" Version="1.0.4" />
+	<PackageReference Include="BlazorDynamicFormGenerator" Version="1.0.5" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <ProjectReference Include="..\..\..\BlazorDynamicFormGenerator\BlazorDynamicFormGenerator.csproj" />

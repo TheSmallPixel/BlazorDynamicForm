@@ -25,16 +25,16 @@ BlazorDynamicFormSyncfusion is a dynamic form generator built with C# for Blazor
 
 .NET CLI
 ```bash
-dotnet add package BlazorDynamicFormDataAnnotation --version 1.0.4
-dotnet add package BlazorDynamicFormGenerator --version 1.0.4
-dotnet add package BlazorDynamicFormSyncfusion --version 1.0.4
+dotnet add package BlazorDynamicFormDataAnnotation --version 1.0.5
+dotnet add package BlazorDynamicFormGenerator --version 1.0.5
+dotnet add package BlazorDynamicFormSyncfusion --version 1.0.5
 ```
 
 Packet Manager
 ```bash
-Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.4
-Install-Package BlazorDynamicFormGenerator -Version 1.0.4
-Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
+Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.5
+Install-Package BlazorDynamicFormGenerator -Version 1.0.5
+Install-Package BlazorDynamicFormSyncfusion -Version 1.0.5
 ```
 # Packages 
 
