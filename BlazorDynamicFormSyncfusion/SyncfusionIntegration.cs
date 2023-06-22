@@ -41,20 +41,7 @@ namespace BlazorDynamicFormSyncfusion
                         builder2.CloseComponent();
                         builder2.AddMarkupContent(4, "\r\n");
                     }));
-                })
-                //.AddCustom<SfComboBox<string, FormVar>, FormVar>("ComboBox", (builder, sequence, attribute) =>
-                //{
-                //    builder.AddAttribute(1, "DataSource", config.DataSource());
-                //    builder.AddAttribute(sequence++, "ChildContent", (RenderFragment)((builder2) =>
-                //    {
-                //        builder2.AddMarkupContent(sequence++, "\r\n");
-                //        builder2.OpenComponent<ComboBoxFieldSettings>(sequence++);
-                //        builder2.AddAttribute(sequence++, "Value", "Value");
-                //        builder2.AddAttribute(sequence++, "Text", "Name");
-                //        builder2.CloseComponent();
-                //        builder2.AddMarkupContent(sequence++, "\r\n");
-                //    }));
-                //})
+                }) 
                 .AddError((builder, sequence, value, name, error) =>
                 {
                     builder.AddAttribute(sequence++, "Value", value);
