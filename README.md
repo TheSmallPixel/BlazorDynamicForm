@@ -11,8 +11,6 @@ BlazorDynamicFormSyncfusion is a dynamic form generator built with C# for Blazor
 
 ## Installation
 
-First, make sure you have the .NET SDK installed. Then, clone the repository and open it in your preferred IDE.
-
 .NET CLI
 ```bash
 dotnet add package BlazorDynamicFormDataAnnotation --version 1.0.4
