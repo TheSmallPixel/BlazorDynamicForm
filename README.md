@@ -112,16 +112,67 @@ Get the result direclty as JSON:
 ```csharp
  void OnValidResult(string data){..}
 ```
-## Showcase with Boostrap and Syncfusion
+
+Result
+```json
+{"FirstName":"Lorenzo","LastName":null,"Email":"l@hoy.com","PhoneNumber":"331","DOB":"2023-06-22T00:00:00+02:00","TotalExperience":10.0,"Country":"id","Address":"piazza 24 maggio"}
+```
+
+Showcase with Boostrap and Syncfusion
 |  |  |
 |:---:|:---:|
 | ![image](https://github.com/TheSmallPixel/BlazorDynamicForm/assets/25280244/8cfc9458-681b-49ce-a2e6-0cebffe7364e) | ![image](https://github.com/TheSmallPixel/BlazorDynamicForm/assets/25280244/f802568d-ebde-4e03-8bd2-30e5cc34804b) |
 
+## Create a Custom Integration
+SyncfusionIntegration is a static class that serves as an example of how to extend the Dynamic Form Configuration to integrate custom data types and components.
 
-## Result
-```json
-{"FirstName":"Lorenzo","LastName":null,"Email":"l@hoy.com","PhoneNumber":"331","DOB":"2023-06-22T00:00:00+02:00","TotalExperience":10.0,"Country":"id","Address":"piazza 24 maggio"}
+The SyncfusionForm method of this class modifies the form's configuration, adding a series of Syncfusion Blazor components with their respective data types. The attributes of these components are set through various builder functions.
+
+```csharp
+public static class SyncfusionIntegration
+    {
+        public static void SyncfusionForm(this DynamicFormConfiguration config)
+        {
+            config
+                .Add<SfTextBox, string>(DataType.Text, (builder, sequence, attribute) =>
+                {
+                    builder.AddAttribute(sequence++, "Readonly", attribute.ReadOnly);
+                })
+                .Add<SfTextBox, string>(DataType.EmailAddress)
+                .Add<SfTextBox, string>(DataType.PhoneNumber)
+                .Add<SfTextBox, string>(DataType.MultilineText, (builder, sequence, attribute) =>
+                {
+                    builder.AddAttribute(sequence++, "Multiline", true);
+                    builder.AddAttribute(sequence++, "Readonly", attribute.ReadOnly);
+                })
+                .Add<SfDatePicker<DateTime?>, DateTime?>(DataType.DateTime)
+                .Add<SfNumericTextBox<decimal?>, decimal?>(DataType.Duration)
+                .AddCustom<SfDropDownList<string, FormVar>, string>("DropdownList", (builder, sequence, attribute) =>
+                {
+                    var linked = attribute.ValidationRules.OfType<LinkedAttribute>().FirstOrDefault();
+                    if (linked is not null)
+                        builder.AddAttribute(sequence++, "DataSource", config.DataSource(linked, attribute.Name));
+                    builder.AddAttribute(sequence++, "ChildContent", (RenderFragment)((builder2) =>
+                    {
+                        builder2.AddMarkupContent(0, "\r\n");
+                        builder2.OpenComponent<DropDownListFieldSettings>(1);
+                        builder2.AddAttribute(2, "Value", "Id");
+                        builder2.AddAttribute(3, "Text", "Name");
+                        builder2.CloseComponent();
+                        builder2.AddMarkupContent(4, "\r\n");
+                    }));
+                }) 
+                .AddError((builder, sequence, value, name, error) =>
+                {
+                    builder.AddAttribute(sequence++, "Value", value);
+                    builder.AddAttribute(sequence++, "PlaceHolder", name);
+                    builder.AddAttribute(sequence++, "class", error ? "is-invalid" : "is-valid");
+                });
+        }
+    }
 ```
+
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
