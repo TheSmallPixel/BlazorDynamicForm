@@ -98,6 +98,14 @@ Refer to the included `Test` class in the `OnInitialized()` method for an exampl
         public string Address { get; set; }
     }
 ```
+Generate the model description:
+```csharp
+var definition = ModuleNodePropertyDefinitionExtensions.GetDefinition<Test>();
+```
+Get the result direclty as JSON:
+```csharp
+ void OnValidResult(string data){...}
+```
 
 ## Contributing
 
