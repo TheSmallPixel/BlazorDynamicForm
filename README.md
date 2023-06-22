@@ -24,11 +24,17 @@ Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.4
 Install-Package BlazorDynamicFormGenerator -Version 1.0.4
 Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
 ```
-## Packages
-- BlazorDynamicFormDataAnnotation: It takes care of generating the forms for blazor.
-- BlazorDynamicFormGenerator: Generate the class description template, so the frontend doesn't have to have the class or it can be dynamic.
-- BlazorDynamicFormSyncfusion: Is an extension to allow you to integrate components dedicated to data type or attribute.
+# Packages Description
 
+This project includes three essential packages that handle various aspects of dynamic form generation and management in Blazor. Here's a brief rundown of what each package offers:
+
+1. **BlazorDynamicFormDataAnnotation**: This package is the heart of the form generation process in Blazor. It employs DataAnnotations for generating dynamic forms, taking the grunt work out of the process. Leveraging the framework's capabilities, it automates form creation based on your annotated model.
+
+2. **BlazorDynamicFormGenerator**: This package acts as a blueprint generator. It dynamically produces class description templates, allowing the frontend to function independently of hardcoded class definitions. The generated templates cater to both fixed and fluid design requirements, offering you the flexibility to adapt to evolving needs.
+
+3. **BlazorDynamicFormSyncfusion**: This extension package is a bridge between the Blazor Dynamic Form and Syncfusion Blazor components. It allows seamless integration of Syncfusion components into the generated forms, offering enhanced user interaction and richer data handling. Each component can be assigned to specific data types or attributes, promoting consistent and streamlined form structures.
+
+Together, these packages serve as a robust toolset for handling form generation in Blazor applications, offering flexibility, ease of use, and integration with industry-leading component libraries.
 ## Form Usage
 
 In your Blazor application, include the namespace for the dynamic form generator.
