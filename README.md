@@ -13,20 +13,20 @@ BlazorDynamicFormSyncfusion is a dynamic form generator built with C# for Blazor
 
 First, make sure you have the .NET SDK installed. Then, clone the repository and open it in your preferred IDE.
 
-##.NET CLI
+.NET CLI
 ```bash
 dotnet add package BlazorDynamicFormDataAnnotation --version 1.0.4
 dotnet add package BlazorDynamicFormGenerator --version 1.0.4
 dotnet add package BlazorDynamicFormSyncfusion --version 1.0.4
 ```
 
-##Packet Manager
+Packet Manager
 ```bash
 NuGet\Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.4
 NuGet\Install-Package BlazorDynamicFormGenerator -Version 1.0.4
 NuGet\Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
 ```
-##Packages
+## Packages
 - BlazorDynamicFormDataAnnotation: It takes care of generating the forms for blazor.
 - BlazorDynamicFormGenerator: Generate the class description template, so the frontend doesn't have to have the class or it can be dynamic.
 - BlazorDynamicFormSyncfusion: Is an extension to allow you to integrate components dedicated to data type or attribute.
