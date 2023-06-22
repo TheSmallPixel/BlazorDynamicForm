@@ -18,11 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="C:\Users\loren\.nuget\packages\blazordynamicformdataannotation\1.0.1\contentFiles\any\net6.0\DynamicForm.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\BlazorDynamicFormDataAnnotation\README.md">
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
@@ -33,7 +29,7 @@
   </ItemGroup>
     
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <ProjectReference Include="..\..\BlazorDynamicFormDataAnnotation\BlazorDynamicFormDataAnnotation\BlazorDynamicFormDataAnnotation\BlazorDynamicFormDataAnnotation.csproj" />
+    <ProjectReference Include="..\BlazorDynamicFormDataAnnotation\BlazorDynamicFormDataAnnotation\BlazorDynamicFormDataAnnotation.csproj" />
   </ItemGroup>
   
   <ItemGroup>

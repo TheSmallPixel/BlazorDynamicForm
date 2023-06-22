@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BlazorDynamicFormSyncfusion\BlazorDynamicFormSyncfusion\BlazorDynamicFormSyncfusion.csproj" />
+    <ProjectReference Include="..\..\BlazorDynamicFormSyncfusion\BlazorDynamicFormSyncfusion.csproj" />
     <ProjectReference Include="..\Shared\BlazorDynamicFormTest.Shared.csproj" />
   </ItemGroup>
 
