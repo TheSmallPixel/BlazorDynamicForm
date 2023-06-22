@@ -2,8 +2,6 @@
 
 BlazorDynamicFormSyncfusion is a dynamic form generator built with C# for Blazor applications, with an integration of the Syncfusion Blazor UI library. It uses data annotation attributes to automatically build forms with validation included.
 
-- [Blazor Dynamic Form](#blazor-dynamic-form)
-  - [Features](#features)
   - [Installation](#installation)
     - [.NET CLI](#net-cli)
     - [Packet Manager](#packet-manager)
