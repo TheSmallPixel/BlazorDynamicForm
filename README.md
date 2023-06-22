@@ -11,24 +11,29 @@ BlazorDynamicFormSyncfusion is a dynamic form generator built with C# for Blazor
 
 ## Installation
 
-First, make sure you have the .NET SDK installed. Then, clone the repository and open it in your preferred IDE.
 .NET CLI
 ```bash
 dotnet add package BlazorDynamicFormDataAnnotation --version 1.0.4
 dotnet add package BlazorDynamicFormGenerator --version 1.0.4
 dotnet add package BlazorDynamicFormSyncfusion --version 1.0.4
 ```
+
 Packet Manager
 ```bash
 NuGet\Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.4
 NuGet\Install-Package BlazorDynamicFormGenerator -Version 1.0.4
 NuGet\Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
 ```
+## Packages
+- BlazorDynamicFormDataAnnotation: It takes care of generating the forms for blazor.
+- BlazorDynamicFormGenerator: Generate the class description template, so the frontend doesn't have to have the class or it can be dynamic.
+- BlazorDynamicFormSyncfusion: Is an extension to allow you to integrate components dedicated to data type or attribute.
+
 ## Form Usage
 
 In your Blazor application, include the namespace for the dynamic form generator.
 
-```csharp
+```razor
 @using BlazorDynamicFormDataAnnotation
 ```
 
@@ -65,15 +70,34 @@ Here is an example of a dynamic form in a Razor component:
 
 Refer to the included `Test` class in the `OnInitialized()` method for an example of a model with data annotations.
 
-## Running the Project
+```csharp
+    public class Test
+    {
+        [Required, Display(Name = "First Name"), DataType(DataType.Text)]
+        public string FirstName { get; set; }
 
-To run the project, use the `dotnet run` command in your terminal from the root directory of the project.
+        [Display(Name = "Last Name"), DataType(DataType.Text)]
+        public string LastName { get; set; }
 
-```bash
-dotnet run
+        [Required, Display(Name = "Email Address"), DataType(DataType.EmailAddress), EmailAddress]
+        public string Email { get; set; }
+
+        [Required, Display(Name = "PhoneNumber"), DataType(DataType.PhoneNumber), Phone]
+        public string PhoneNumber { get; set; }
+
+        [Required, Display(Name = "Date of Birth"), DataType(DataType.DateTime)]
+        public DateTime? DOB { get; set; }
+
+        [Required, DataType(DataType.Duration), Display(Name = "Total Experience"), Range(0, 20, ErrorMessage = "The Experience range should be 0 to 20"), DefaultValue(10.0)]
+        public decimal TotalExperience { get; set; } = 22;
+
+        [Required, Display(Name = "Select a Country"), DataType("DropdownList"), LinkedAttribute(typeof(int))]
+        public string Country { get; set; }
+
+        [Required, DataType(DataType.MultilineText), Display(Name = "Address"), DefaultValue("piazza 24 maggio"), BlazorDynamicFormGenerator.ReadOnly]
+        public string Address { get; set; }
+    }
 ```
-
-Open your web browser and navigate to `https://localhost:5001` (or `http://localhost:5000` for non-secure HTTP) to see the application running.
 
 ## Contributing
 
