@@ -72,16 +72,6 @@ Here is an example of a dynamic form in a Razor component:
 
 Refer to the included `Test` class in the `OnInitialized()` method for an example of a model with data annotations.
 
-## Running the Project
-
-To run the project, use the `dotnet run` command in your terminal from the root directory of the project.
-
-```bash
-dotnet run
-```
-
-Open your web browser and navigate to `https://localhost:5001` (or `http://localhost:5000` for non-secure HTTP) to see the application running.
-
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
