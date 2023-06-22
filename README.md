@@ -33,7 +33,7 @@ NuGet\Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
 
 In your Blazor application, include the namespace for the dynamic form generator.
 
-```csharp
+```razor
 @using BlazorDynamicFormDataAnnotation
 ```
 
@@ -69,6 +69,35 @@ Here is an example of a dynamic form in a Razor component:
 ```
 
 Refer to the included `Test` class in the `OnInitialized()` method for an example of a model with data annotations.
+
+```csharp
+    public class Test
+    {
+        [Required,Display(Name = "First Name"),DataType(DataType.Text)]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name"),DataType(DataType.Text)]
+        public string LastName { get; set; }
+
+        [Required,Display(Name = "Email Address"),DataType(DataType.EmailAddress),EmailAddress]
+        public string Email { get; set; }
+
+        [Required,Display(Name = "PhoneNumber"),DataType(DataType.PhoneNumber),Phone]
+        public string PhoneNumber { get; set; }
+
+        [Required,Display(Name = "Date of Birth"),DataType(DataType.DateTime)]
+        public DateTime? DOB { get; set; }
+
+        [Required,DataType(DataType.Duration),Display(Name = "Total Experience"),Range(0, 20, ErrorMessage = "The Experience range should be 0 to 20"),DefaultValue(10.0)]
+        public decimal TotalExperience { get; set; } = 22;
+
+        [Required,Display(Name = "Select a Country"),DataType("DropdownList"),LinkedAttribute(typeof(int))]
+        public string Country { get; set; }
+
+        [Required,DataType(DataType.MultilineText),Display(Name = "Address"),DefaultValue("piazza 24 maggio"),BlazorDynamicFormGenerator.ReadOnly]
+        public string Address { get; set; }
+    }
+```
 
 ## Contributing
 
