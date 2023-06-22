@@ -36,7 +36,7 @@ Install-Package BlazorDynamicFormDataAnnotation -Version 1.0.4
 Install-Package BlazorDynamicFormGenerator -Version 1.0.4
 Install-Package BlazorDynamicFormSyncfusion -Version 1.0.4
 ```
-# Packages Description
+# Packages 
 
 This project includes three essential packages that handle various aspects of dynamic form generation and management in Blazor. Here's a brief rundown of what each package offers:
 
