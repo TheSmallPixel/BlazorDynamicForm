@@ -40,7 +40,7 @@ In your Blazor application, include the namespace for the dynamic form generator
 Here is an example of a dynamic form in a Razor component:
 
 ```razor
-<DynamicForm DataDefinition="@definition" DataObject="@data" OnValidSubmit="@PrintResult">
+<DynamicForm DataDefinition="@definition" DataObject="@data" OnValidSubmit="@OnValidResult">
     <ValidationMessageTemplate Context="error">
         @error
     </ValidationMessageTemplate>
@@ -106,6 +106,10 @@ Get the result direclty as JSON:
 ```csharp
  void OnValidResult(string data){..}
 ```
+## Showcase with Boostrap and Syncfusion
+![image](https://github.com/TheSmallPixel/BlazorDynamicForm/assets/25280244/8cfc9458-681b-49ce-a2e6-0cebffe7364e)
+![image](https://github.com/TheSmallPixel/BlazorDynamicForm/assets/25280244/f802568d-ebde-4e03-8bd2-30e5cc34804b)
+
 
 ## Contributing
 
