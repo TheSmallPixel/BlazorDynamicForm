@@ -104,7 +104,7 @@ var definition = ModuleNodePropertyDefinitionExtensions.GetDefinition<Test>();
 ```
 Get the result direclty as JSON:
 ```csharp
- void OnValidResult(string data){...}
+ void OnValidResult(string data){..}
 ```
 
 ## Contributing
