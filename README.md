@@ -21,7 +21,7 @@ BlazorDynamicFormSyncfusion is a dynamic form generator built with C# for Blazor
 - Customization options for form fields.
 - Automatic form generation and handling.
 
-## Cooming soon
+## Coming soon
 - CSS customization for each property, so you can use the boostrap grid system.
 
 ## Installation
