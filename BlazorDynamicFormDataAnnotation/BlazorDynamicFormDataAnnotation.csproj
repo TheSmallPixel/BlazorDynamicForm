@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicForm</PackageProjectUrl>
-	<VersionPrefix>1.0.5</VersionPrefix>
+	<VersionPrefix>1.0.8</VersionPrefix>
     <PackageTags>Blazor;Dynamic;Form;Data;Annotation;</PackageTags>
     <RepositoryUrl>https://github.com/TheSmallPixel</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -38,7 +38,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-	<PackageReference Include="BlazorDynamicFormGenerator" Version="1.0.5" />
+	<PackageReference Include="BlazorDynamicFormGenerator" Version="1.0.8" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <ProjectReference Include="..\..\..\BlazorDynamicFormGenerator\BlazorDynamicFormGenerator.csproj" />

@@ -5,10 +5,18 @@ namespace BlazorDynamicFormGenerator;
 
 public static class ModuleNodePropertyDefinitionExtensions
 {
+    public static ModuleNodeDefinition GetDefinition<T>(T obj)
+    {
+        return GetDefinition(typeof(T));
+    }
     public static ModuleNodeDefinition GetDefinition<T>()
     {
+        return GetDefinition(typeof(T));
+    }
+    public static ModuleNodeDefinition GetDefinition(Type type)
+    {
         var definition = new ModuleNodeDefinition();
-        var proList = typeof(T).GetProperties();
+        var proList = type.GetProperties();
         foreach (var prp in proList)
         {
             var attrList = (DataTypeAttribute)prp.GetCustomAttributes(typeof(DataTypeAttribute), false).First();
