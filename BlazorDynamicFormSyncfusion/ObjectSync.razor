@@ -1,0 +1,35 @@
+﻿@using Syncfusion.Blazor.Navigations
+@using System.Dynamic
+@using BlazorDynamicForm.Entities
+@if (Formmap != null && Formkey != null)
+{
+    <SfAccordion>
+        <AccordionItems>
+            <AccordionItem>
+                <HeaderTemplate>
+                    @Formkey
+                    <div></div>
+                </HeaderTemplate>
+                <ContentTemplate>
+                    @{
+                        foreach (var nice in ChildBuilder.Invoke(Formkey, Value))
+                        {
+                            @nice
+                        }
+                    }
+                </ContentTemplate>
+            </AccordionItem>
+        </AccordionItems>
+    </SfAccordion>
+}
+
+@code {
+    [Parameter]
+    public ExpandoObject Value { get; set; }
+    [Parameter]
+    public FormMap Formmap { get; set; }
+    [Parameter]
+    public string Formkey { get; set; }
+    [Parameter]
+    public Func<string, object, List<RenderFragment>> ChildBuilder { get; set; }
+}
