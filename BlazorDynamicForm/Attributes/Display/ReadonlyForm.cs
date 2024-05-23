@@ -1,5 +1,5 @@
 ﻿namespace BlazorDynamicForm.Attributes.Display;
 
-public class ReadonlyFormAttribute : DisplayForm
+public class ReadonlyForm : DisplayForm
 {
 }

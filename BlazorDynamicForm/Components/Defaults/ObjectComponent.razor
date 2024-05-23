@@ -1,0 +1,42 @@
+﻿@inherits FormComponentBase
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+
+@if (Status)
+{
+                        <button @onclick="Close" >Close</button>
+    @foreach (var item in FormProperty.Properties)
+    {
+         <div>
+             <h4>@item.Key</h4>
+            @foreach (var child in ChildBuilder(item.Value,item.Key, Value as IDictionary<string,object>))
+             {
+                 @child;
+             }
+         </div>
+    }
+}
+else
+{
+        <button @onclick="Open">Open Object @FormProperty.Name</button>
+}
+
+
+
+@code {
+    private bool Status = false;
+
+
+    private void Open()
+    {
+
+        Status = true;
+    }
+
+    private void Close()
+    {
+        Status = false;
+    }
+}

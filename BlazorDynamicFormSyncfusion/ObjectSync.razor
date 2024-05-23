@@ -1,6 +1,8 @@
 ﻿@using Syncfusion.Blazor.Navigations
-@using System.Dynamic
-@using BlazorDynamicForm.Entities
+@using BlazorDynamicForm.Components
+
+@inherits FormComponentBase
+
 @if (Formmap != null && Formkey != null)
 {
     <SfAccordion>
@@ -24,12 +26,5 @@
 }
 
 @code {
-    [Parameter]
-    public ExpandoObject Value { get; set; }
-    [Parameter]
-    public FormMap Formmap { get; set; }
-    [Parameter]
-    public string Formkey { get; set; }
-    [Parameter]
-    public Func<string, object, List<RenderFragment>> ChildBuilder { get; set; }
+   
 }

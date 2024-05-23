@@ -13,7 +13,9 @@
 
   <ItemGroup>
     
-    <ProjectReference Include="..\..\BlazorDynamicFormSyncfusion\BlazorDynamicFormSyncfusion.csproj" />
+    
+    <ProjectReference Include="..\..\BlazorDynamicForm\BlazorDynamicForm.csproj" />
+    
     
     <ProjectReference Include="..\Shared\BlazorDynamicFormTest.Shared.csproj" />
   </ItemGroup>

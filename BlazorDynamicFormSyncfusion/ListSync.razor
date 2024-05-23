@@ -8,7 +8,7 @@
     <GridEvents OnActionBegin="BeginHandler" TValue="ExpandoObject"></GridEvents>
     <GridColumns>
         <GridColumn Field="Index" Visible="false" HeaderText="#" IsPrimaryKey="true" Width="auto" AllowAdding="false" AllowEditing="false"></GridColumn>
-        <GridColumn HeaderText="@Formmap.Properties[Formkey].TypeFullName"  Width="40" AllowAdding="false" AllowEditing="false">
+        <GridColumn HeaderText="@Formmap.Properties[Formkey].Type"  Width="40" AllowAdding="false" AllowEditing="false">
             <Template>
                 Item
                 @*@{
@@ -24,9 +24,9 @@
     </GridColumns>
     <GridTemplates>
         <DetailTemplate>
-            @if (Formmap != null && Formmap.Properties[Formkey] != null && Formmap.Properties[Formkey].Structure.Any())
+            @if (Formmap != null && Formmap.Properties[Formkey] != null && Formmap.Properties[Formkey].Properties.Any())
             {
-                var typeKey = Formmap.Properties[Formkey].Structure.FirstOrDefault().Value;
+                var typeKey = Formmap.Properties[Formkey].Properties.FirstOrDefault().Value;
                 if(typeKey != null){
                     foreach (var nice in ChildBuilder.Invoke(typeKey, context))
                     {

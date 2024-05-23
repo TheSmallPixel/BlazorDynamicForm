@@ -1,0 +1,17 @@
+﻿@inherits FormComponentBase
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+
+<InputNumber @bind-Value:get="TypedValue" @bind-Value:set="OnValueChanged" />
+
+@code {
+   
+    private int TypedValue => Convert.ToInt32(Value);
+
+    private void OnValueChanged(int newValue)
+    {
+        Value = newValue;
+    }
+}

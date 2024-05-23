@@ -1,0 +1,22 @@
+﻿@inherits FormComponentBase
+
+
+<button @onclick="AddItem">Add Item</button>
+@* @foreach (var item in TypedValue)
+{
+    <div>@ChildBuilder(Formkey, item)</div>
+}
+ *@
+
+
+@code {
+    private List<object> TypedValue
+    {
+        get => Value as List<object>;
+    }
+
+    private void AddItem()
+    {
+        TypedValue.Add(new object());
+    }
+}

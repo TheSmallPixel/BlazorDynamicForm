@@ -1,0 +1,28 @@
+﻿@inherits FormComponentBase
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+
+<InputText @bind-Value:get="TypedValue" @bind-Value:set="Set"  />
+
+@code {
+    private string TypedValue => Convert.ToString(Value);
+    // {
+    //     get {
+    //         return Convert.ToString(Value);
+    //     }
+    //     ;
+    //     set {
+    //         Value = value;
+    //     }
+    //     ;
+    // }
+
+
+    private void Set(string newValue)
+    {
+        Value = newValue;
+
+    }
+}

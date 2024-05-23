@@ -1,0 +1,13 @@
+﻿@inherits FormComponentBase
+
+<InputNumber Value="@TypedValue" ValueChanged="@OnValueChanged" class="form-control" />
+
+@code {
+
+    private float TypedValue => Convert.ToSingle(Value);
+
+    protected async Task OnValueChanged(float newValue)
+    {
+        Value = newValue;
+    }
+}

@@ -1,54 +1,16 @@
 ﻿@page "/"
 @using System.Dynamic
-@using BlazorDynamicForm.Attributes.Display
+@using BlazorDynamicForm
 @using BlazorDynamicForm.Entities
-@using BlazorDynamicForm.Utility
 @using Newtonsoft.Json
+@using Newtonsoft.Json.Converters
 @inject HttpClient Http
 
 @if (definition != null)
 {
-    <DynamicForm FormDefinition="@definition" DataObject="@data" OnValidSubmit="@OnValidResult">
-        <ValidationMessageTemplate Context="error">
-            @error
-        </ValidationMessageTemplate>
+    <DynamicForm FormDefinition="@definition" OnValidSubmit="@OnValidResult">
         <FieldTemplate Context="template">
-            @if (template.PropertyInfo.PropertyType == FormPropertyType.Primitive)
-            {
-                <div class="row mb-3">
-                    <label for="@template.PropertyInfo.TypeName" class="col-sm-2 col-form-label">@GetName(template.PropertyInfo)</label>
-                    <div class="has-validation col-sm-10">
-                        @if (!template.IsValid)
-                        {
-                            <div class="invalid-feedback d-block">
-                                @template.ValidationComponent
-                            </div>
-                        }
-                        <div class="col">
-                            @template.DynamicComponent
-                        </div>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="row">
-                    <label for="@template.PropertyInfo.TypeName" class="col-sm-2 col-form-label">@GetName(template.PropertyInfo)</label>
-                </div>
-                <div class="row">
-                    <div class="has-validation col">
-                        @if (!template.IsValid)
-                        {
-                            <div class="invalid-feedback d-block">
-                                @template.ValidationComponent
-                            </div>
-                        }
-                        <div class="col">
-                            @template.DynamicComponent
-                        </div>
-                    </div>
-                </div>
-            }
+            @template.DynamicComponent
         </FieldTemplate>
         <SubmitTemplate>
             <div class="col-12">
@@ -58,32 +20,25 @@
     </DynamicForm>
 }
 
+
 <p>@Result</p>
 @code {
 
-    private string GetName(FormProperty property)
-    {
-        var displayName = property.DisplayRules.OfType<DisplayNameForm>().FirstOrDefault();
-        if (displayName == null)
-        {
-            return StringUtils.AddSpacesToCamelCase(property.PropertyName ?? property.TypeName);
-        }
-        return displayName.Name;
-    }
 
     void OnValidResult(ExpandoObject? data)
     {
         JsonData = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
             {
-                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                TypeNameHandling = TypeNameHandling.Auto
+               // DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+               // TypeNameHandling = TypeNameHandling.Auto,
+                Converters = new[] { new ExpandoObjectConverter() }
             });
-        Console.WriteLine(data);
+        Console.WriteLine(JsonData);
     }
     private string Result { get; set; }
 
     FormMap? definition;
-    ExpandoObject? data;
+    // ExpandoObject? data;
     public static string? JsonData = null;
 
 
@@ -93,11 +48,11 @@
         var definitionRaw = await Http.GetStringAsync("Definition");
         if (!string.IsNullOrWhiteSpace(JsonData))
         {
-            data = JsonConvert.DeserializeObject<ExpandoObject?>(JsonData, new JsonSerializerSettings()
-            {
-                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                TypeNameHandling = TypeNameHandling.Auto
-            });
+            // data = JsonConvert.DeserializeObject<ExpandoObject?>(JsonData, new JsonSerializerSettings()
+            //     {
+            //         DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+            //         TypeNameHandling = TypeNameHandling.Auto
+            //     });
         }
         Console.WriteLine(definitionRaw);
         definition = JsonConvert.DeserializeObject<FormMap>(definitionRaw, new JsonSerializerSettings()
@@ -105,6 +60,9 @@
                 DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
                 TypeNameHandling = TypeNameHandling.Auto
             });
+        StateHasChanged();
+
+
 
     }
 
