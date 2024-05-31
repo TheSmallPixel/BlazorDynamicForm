@@ -1,40 +1,31 @@
-﻿using BlazorDynamicForm.Entities;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace BlazorDynamicForm.Components
 {
     public abstract class FormComponentBase : ComponentBase
-    {                                   
+    {
+        [Parameter] 
+        public DynamicForm Form { get; set; }
         [Parameter]
-        public string Formkey { get; set; }
-
+        public string PropertyName { get; set; }
         [Parameter]
-        public FormProperty FormProperty { get; set; }
-
-        private object InnerValue;
+        public string PropertyType { get; set; }
+        [Parameter]
+        public bool IsFirst { get; set; }
+        [Parameter]
+        public Action<object> ValueChanged { get; set; }
         [Parameter]
         public object Value
         {
-            get
-            {
-                return InnerValue;
-            }
+            get => _innerValue;
             set
             {
-                InnerValue = value;
+                _innerValue = value;
                 ValueChanged(value);
 
             }
         }
 
-        [Parameter]
-        public bool IsFirst { get; set; }
-
-        [Parameter]
-        public Func<string, string, IDictionary<string, object>, List<RenderFragment>> ChildBuilder { get; set; }
-
-        [Parameter]
-        public Action<object> ValueChanged { get; set; }
-
+        private object _innerValue;
     }
 }

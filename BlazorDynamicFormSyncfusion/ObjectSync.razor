@@ -3,27 +3,25 @@
 
 @inherits FormComponentBase
 
-@if (Formmap != null && Formkey != null)
-{
+
     <SfAccordion>
         <AccordionItems>
             <AccordionItem>
                 <HeaderTemplate>
-                    @Formkey
+                    @PropertyName
                     <div></div>
                 </HeaderTemplate>
                 <ContentTemplate>
                     @{
-                        foreach (var nice in ChildBuilder.Invoke(Formkey, Value))
-                        {
-                            @nice
-                        }
+                        // foreach (var nice in ChildBuilder.Invoke(Formkey, Value))
+                        // {
+                        //     @nice
+                        // }
                     }
                 </ContentTemplate>
             </AccordionItem>
         </AccordionItems>
     </SfAccordion>
-}
 
 @code {
    

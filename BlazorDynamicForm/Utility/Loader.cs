@@ -21,7 +21,9 @@ public static class Loader
 
         config.AddObjectRenderer<ObjectComponent>();
         config.AddCollectionRenderer<ListComponent>();
-        //TODO: config.AddDictionaryRenderer<>();
+        config.AddDictionaryRenderer<DictionaryComponent>();
+        
+        config.AddCustomRenderer<TextAreaAttribute, TextAreaComponent>();
         return config;
     }
 

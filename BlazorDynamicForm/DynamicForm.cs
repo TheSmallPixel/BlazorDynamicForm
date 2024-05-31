@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Collections;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.Dynamic;
 using BlazorDynamicForm.Entities;
@@ -9,10 +10,10 @@ namespace BlazorDynamicForm
     public class DynamicForm : ComponentBase
     {
         [Parameter]
-        public ExpandoObject? DataObject { get; set; }
+        public ExpandoObject DataObject { get; set; }
 
         [Parameter]
-        public FormMap? FormDefinition { get; set; }
+        public FormMap FormDefinition { get; set; }
 
         [Parameter]
         public EventCallback<ExpandoObject?> OnValidSubmit { get; set; }
@@ -22,6 +23,7 @@ namespace BlazorDynamicForm
 
         [Parameter]
         public RenderFragment<FieldTemplateContext> FieldTemplate { get; set; }
+
         [Parameter]
         public RenderFragment SubmitTemplate { get; set; }
 
@@ -50,18 +52,12 @@ namespace BlazorDynamicForm
         {
             DataObject ??= new ExpandoObject();
             var dataDictionary = DataObject as IDictionary<string, object>;
-            if (FormDefinition == null || dataDictionary == null)
-                return;
-
             builder.OpenRegion(0);
-            foreach (var frag in CreateComponents(FormDefinition.EntryType, FormDefinition.EntryType, dataDictionary))
-            {
-                builder.AddContent(1, frag);
-            }
+            builder.AddContent(1, CreateComponents(FormDefinition.EntryType, FormDefinition.EntryType, dataDictionary, true));
             builder.CloseRegion();
         }
 
-        private object CreateObject(string key)
+        public object? CreateObject(string key)
         {
             Console.WriteLine($"Creating {key}..");
             return FormDefinition.CreateObject(key, (option) =>
@@ -74,33 +70,96 @@ namespace BlazorDynamicForm
             });
         }
 
-        //this can create Primitive, Array, Objects-
-        private List<RenderFragment> CreateComponents(string key, string propertyName, IDictionary<string, object> data)
+        public RenderFragment CreateComponents(string key, string propertyName, object container, bool isFirst = false)
         {
-            List<RenderFragment> fragments = new();
             if (!FormDefinition.Properties.TryGetValue(key, out var property))
                 throw new InvalidOperationException($"The {key} is not in the Form Definition");
 
-            if (!data.ContainsKey(propertyName))
-                data[propertyName] = CreateObject(key);
+            object? value = null;
+            if (container is IDictionary<string, object> dict)
+            {
+                if (!dict.TryGetValue(propertyName, out value))
+                {
+                    value = CreateObject(key);
+                    dict[propertyName] = value;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Container type or property name type is not supported or does not match.");
+            }
 
             var sequence = new Sequence();
-            var formComponentType = Configuration.GetElement(property);
-            Action<object> updateContent = (updateData) => { data[propertyName] = updateData; };
+            Action<object> updateContent = (updateData) =>
+            {
+                if (container is IDictionary<string, object> dict)
+                {
+                    dict[propertyName] = updateData;
+                }
+            };
+
+            void Component(RenderTreeBuilder builder)
+            {
+                builder.OpenComponent(sequence++, Configuration.GetElement(property));
+                builder.AddAttribute(sequence++, "Form", this);
+                builder.AddAttribute(sequence++, "PropertyName", propertyName);
+                builder.AddAttribute(sequence++, "PropertyType", key);
+                builder.AddAttribute(sequence++, "IsFirst", isFirst);
+                builder.AddAttribute(sequence++, "ValueChanged", updateContent);
+                builder.AddAttribute(sequence++, "Value", value);
+                builder.CloseComponent();
+            }
+
+            return FieldTemplate(new FieldTemplateContext(property, Component));
+        }
+
+        public RenderFragment CreateComponents(string key, int index, object container, bool isFirst = false)
+        {
+            if (!FormDefinition.Properties.TryGetValue(key, out var property))
+                throw new InvalidOperationException($"The {key} is not in the Form Definition");
+            object? value = null;
+            if (container is IList<object> list)
+            {
+                if (index >= 0 && index < list.Count)
+                {
+                    value = list[index];
+                }
+                else if (index == list.Count)
+                {
+                    value = CreateObject(key);
+                    list.Add(value);
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range for the list.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Container type or property name type is not supported or does not match.");
+            }
+
+            var sequence = new Sequence();
+            Action<object> updateContent = (updateData) =>
+            {
+                if (container is IList<object> list)
+                {
+                    list[index] = updateData;
+                }
+            };
+
             RenderFragment component = (builder) =>
             {
-                Func<string, string, IDictionary<string, object>, List<RenderFragment>> opeFunc = CreateComponents;
-                builder.OpenComponent(sequence++, formComponentType);
+                builder.OpenComponent(sequence++, Configuration.GetElement(property));
+                builder.AddAttribute(sequence++, "Form", this);
+                builder.AddAttribute(sequence++, "PropertyName", index.ToString());
+                builder.AddAttribute(sequence++, "PropertyType", key);
+                builder.AddAttribute(sequence++, "IsFirst", isFirst);
                 builder.AddAttribute(sequence++, "ValueChanged", updateContent);
-                builder.AddAttribute(sequence++, "Value", data[propertyName]);
-                builder.AddAttribute(sequence++, "ChildBuilder", opeFunc);
-                builder.AddAttribute(sequence++, "IsFirst", false);
-                builder.AddAttribute(sequence++, "FormProperty", property);
-                builder.AddAttribute(sequence++, "Formkey", key);
+                builder.AddAttribute(sequence++, "Value", value);
                 builder.CloseComponent();
             };
-            fragments.Add(FieldTemplate(new FieldTemplateContext(property, component)));
-            return fragments;
+            return FieldTemplate(new FieldTemplateContext(property, component));
         }
 
         private async Task HandleSubmitAsync()

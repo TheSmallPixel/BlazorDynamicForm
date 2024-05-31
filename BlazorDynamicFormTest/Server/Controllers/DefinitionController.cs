@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Security.Cryptography.X509Certificates;
 using BlazorDynamicForm;
+using BlazorDynamicForm.Attributes.Display;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -21,6 +22,7 @@ namespace BlazorDynamicFormTest.Server.Controllers
         {
             var def = DataAnnotationParser.ReadDataAnnotationsAsJson<TestLol>((option) =>
             {
+                option.Attributes.Add(typeof(TextAreaAttribute));
             });
             //var data = def.CreateObject((option) =>
             //{

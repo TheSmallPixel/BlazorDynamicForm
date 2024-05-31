@@ -7,7 +7,7 @@ public class Lol
 {
     [PlaceholderForm("Ciao"), DefaultValueForm("Ciao")]
     public string Name { get; set; }
-    [DisplayNameForm("Ciao")]
+    [DisplayNameForm("Ciao"), TextArea]
     public string Surname { get; set; }
     [DisplayNameForm("Ciao")]
     [MultipleSelectForm(new []{"AAA","BBB"})]

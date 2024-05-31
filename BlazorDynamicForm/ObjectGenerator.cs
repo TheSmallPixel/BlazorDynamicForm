@@ -59,21 +59,21 @@ namespace BlazorDynamicForm
 
                     return collectionData;
                 case FormPropertyType.Dictionary:
-                    var dictionaryData = new Dictionary<object, object>();
+                    var dictionaryData = new Dictionary<string, object>();
                     if (options.CreateDictionaryElement)
                     {
-                        var dicKey = prop.Properties.First().Value;
+                        //var dicKey = prop.Properties.First().Value;
                         var dicValue = prop.Properties.Last().Value;
-                        var dickObjectKey = CreateObject(definition, options, dicKey, depth, false);
+                        //var dickObjectKey = CreateObject(definition, options, dicKey, depth, false);
                         var dickObjectValue = CreateObject(definition, options, dicValue, depth);
-                        if (dickObjectKey == null)
+                        if (dickObjectValue == null)
                         {
                             //this happen on max recursive lenght reaced point, just avoid to add anything
                             //throw new Exception($"the dictionary key cannot be null, {dicKey}");
                         }
                         else
                         {
-                            dictionaryData.Add(dickObjectKey, dickObjectValue);
+                            dictionaryData.Add(Guid.NewGuid().ToString(), dickObjectValue);
                         }
                     }
 
