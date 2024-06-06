@@ -1,8 +1,8 @@
 ﻿namespace BlazorDynamicForm.Attributes.Display;
 
-public class DefaultValueForm : DisplayForm
+public class DefaultValueFormAttribute : DisplayFormAttribute
 {
-    public DefaultValueForm(object defaultValue)
+    public DefaultValueFormAttribute(object defaultValue)
     {
         DefaultValue = defaultValue;
     }

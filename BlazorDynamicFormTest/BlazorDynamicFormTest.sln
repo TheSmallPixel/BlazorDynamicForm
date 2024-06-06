@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDynamicFormTest.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDynamicForm", "..\BlazorDynamicForm\BlazorDynamicForm.csproj", "{992A9CFF-6BEC-43EF-85CF-EF14684CC7F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDynamicFormSyncfusion", "..\BlazorDynamicFormSyncfusion\BlazorDynamicFormSyncfusion.csproj", "{2A0ABDFF-9CEA-425D-ACE1-41DD9D4CD584}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeAnnotationParser", "..\..\TypeAnnotationParser\TypeAnnotationParser\TypeAnnotationParser.csproj", "{A1086B4E-C0CE-43AF-8706-817FBDADC6B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{992A9CFF-6BEC-43EF-85CF-EF14684CC7F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{992A9CFF-6BEC-43EF-85CF-EF14684CC7F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{992A9CFF-6BEC-43EF-85CF-EF14684CC7F0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A0ABDFF-9CEA-425D-ACE1-41DD9D4CD584}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A0ABDFF-9CEA-425D-ACE1-41DD9D4CD584}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A0ABDFF-9CEA-425D-ACE1-41DD9D4CD584}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A0ABDFF-9CEA-425D-ACE1-41DD9D4CD584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1086B4E-C0CE-43AF-8706-817FBDADC6B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1086B4E-C0CE-43AF-8706-817FBDADC6B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1086B4E-C0CE-43AF-8706-817FBDADC6B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1086B4E-C0CE-43AF-8706-817FBDADC6B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

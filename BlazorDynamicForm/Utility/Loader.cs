@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using BlazorDynamicForm.Attributes.Display;
-using BlazorDynamicForm.Components;
 using BlazorDynamicForm.Components.Defaults;
 using BlazorDynamicForm.Entities;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +13,7 @@ public static class Loader
         var config = new DynamicFormConfiguration();
         services.AddSingleton(config);
         //TODO: add special componnet config.AddCustomRenderer<CodeEditor, CodeEditor>();
-        
+
         config.AddPrimitive<float, FloatComponent>();
         config.AddPrimitive<int, IntComponent>();
         config.AddPrimitive<string, StringComponent>();
@@ -22,8 +21,14 @@ public static class Loader
         config.AddObjectRenderer<ObjectComponent>();
         config.AddCollectionRenderer<ListComponent>();
         config.AddDictionaryRenderer<DictionaryComponent>();
-        
-        config.AddCustomRenderer<TextAreaAttribute, TextAreaComponent>();
+
+
+        config.AddCustomRenderer<FileData, FileComponent>();
+
+        config.AddCustomAttributeRenderer<MultipleSelectAttribute, MultipleOptionsComponent>();
+        config.AddCustomAttributeRenderer<CodeEditorAttribute, CodeEditorComponent>();
+        config.AddCustomAttributeRenderer<TextAreaAttribute, TextAreaComponent>();
+        //config.AddCustomRenderer<FileAttribute, >();
         return config;
     }
 

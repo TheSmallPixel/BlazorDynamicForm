@@ -1,9 +1,9 @@
 ﻿@page "/"
 @using System.Dynamic
 @using BlazorDynamicForm
-@using BlazorDynamicForm.Entities
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Converters
+@using TypeAnnotationParser
+
+
 @inject HttpClient Http
 
 @if (definition != null)
@@ -27,17 +27,12 @@
 
     void OnValidResult(ExpandoObject? data)
     {
-        JsonData = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
-            {
-               // DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-               // TypeNameHandling = TypeNameHandling.Auto,
-                Converters = new[] { new ExpandoObjectConverter() }
-            });
+        JsonData = definition.SerializeObject(data);
         Console.WriteLine(JsonData);
     }
     private string Result { get; set; }
 
-    FormMap? definition;
+    TypeAnnotationModel? definition;
     // ExpandoObject? data;
     public static string? JsonData = null;
 
@@ -46,20 +41,8 @@
     {
 
         var definitionRaw = await Http.GetStringAsync("Definition");
-        if (!string.IsNullOrWhiteSpace(JsonData))
-        {
-            // data = JsonConvert.DeserializeObject<ExpandoObject?>(JsonData, new JsonSerializerSettings()
-            //     {
-            //         DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-            //         TypeNameHandling = TypeNameHandling.Auto
-            //     });
-        }
         Console.WriteLine(definitionRaw);
-        definition = JsonConvert.DeserializeObject<FormMap>(definitionRaw, new JsonSerializerSettings()
-            {
-                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                TypeNameHandling = TypeNameHandling.Auto
-            });
+        definition = TypeAnnotationModel.FromJson(definitionRaw);
         StateHasChanged();
 
 

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using BlazorDynamicForm.Entities;
+using TypeAnnotationParser;
 
 namespace BlazorDynamicForm.Attributes.Validation;
 
 public class RequiredRule : ValidationRule
 {
-    public override bool IsValid(FormMap map, object? value)
+    public override bool IsValid(TypeAnnotationModel map, object? value)
     {
         if (value == null)
         {

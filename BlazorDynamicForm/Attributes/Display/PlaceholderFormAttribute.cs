@@ -1,8 +1,8 @@
 ﻿namespace BlazorDynamicForm.Attributes.Display;
 
-public class PlaceholderForm : DisplayForm
+public class PlaceholderFormAttribute : DisplayFormAttribute
 {
-    public PlaceholderForm(string placeholder)
+    public PlaceholderFormAttribute(string placeholder)
     {
         Placeholder = placeholder;
     }

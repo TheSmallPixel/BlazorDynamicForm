@@ -12,6 +12,5 @@ public class TEsto
     public string Baba { get; set; }                  
     public Lol test2 { get; set; }
 
-    [DataType(DataTypeAttribute.FormDatatype.Dictionary), FormDictionary(nameof(Lol.Name))]
     public List<Lol> test3 { get; set; }
 }

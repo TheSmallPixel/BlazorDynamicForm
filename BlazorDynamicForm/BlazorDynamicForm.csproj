@@ -15,14 +15,8 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Title>Blazor Dynamic Form Generator</Title>
 		<Authors>Lorenzo Longiave</Authors>
+		<LangVersion>12</LangVersion>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <None Include="..\README.md" Link="README.md">
-	    <PackagePath>\</PackagePath>
-	    <Pack>True</Pack>
-	  </None>
-	</ItemGroup>
 
 
 	<ItemGroup>
@@ -30,9 +24,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BlazorMonaco" Version="3.2.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.14" />
 
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\TypeAnnotationParser\TypeAnnotationParser\TypeAnnotationParser.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

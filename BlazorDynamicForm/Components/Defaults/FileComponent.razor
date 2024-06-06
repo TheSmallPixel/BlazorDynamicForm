@@ -1,0 +1,91 @@
+﻿@inherits FormComponentBase
+@inject ILogger<FileComponent> Logger
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Logging
+@using BlazorDynamicForm.Attributes.Display
+<div class="row">
+    <label for="@PropertyType" class="col-sm-2 col-form-label">@PropertyName</label>
+    <div class="col-sm-10">
+        <div class="input-group mb-3">
+            <span class="input-group-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+                    <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                </svg>
+            </span>
+
+            <InputFile OnChange="LoadFiles" disabled="@isLoading" class="form-control flex-grow-1" />
+            @if (isLoading)
+            {
+                <span class="input-group-text">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </span>
+            }
+        </div>
+        @if (error != null)
+        {
+            <div class="alert alert-danger">
+                Error: @error
+            </div>
+        }
+    </div>
+</div>
+@code {
+    private CancellationTokenSource? cts;
+    long maxFileSize = 1024 * 1024 * 15;
+    private bool isLoading;
+    private string? error;
+
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        isLoading = true;
+        error = null;
+        UpdateState();
+
+        cts = new CancellationTokenSource();
+        var cancellationToken = cts.Token;
+
+        foreach (var file in e.GetMultipleFiles(1))
+        {
+            try
+            {
+                using var stream = file.OpenReadStream(maxFileSize, cancellationToken);
+                if (stream == null)
+                {
+                    error = "Failed to obtain a readable stream from the file.";
+                    Logger.LogError("Stream is null for file: {FileName}", file.Name);
+                    continue;
+                }
+
+                await using var memoryStream = new MemoryStream();
+                await stream.CopyToAsync(memoryStream, cancellationToken);
+                memoryStream.Position = 0; // Reset position after copy
+                var data = new FileData { Data = Convert.ToBase64String(memoryStream.ToArray()), Name = file.Name, ContentType = file.ContentType };
+                Value = data;
+            }
+            catch (OperationCanceledException)
+            {
+                error = "Loading canceled by user.";
+                Logger.LogWarning("File loading was canceled by user.");
+            }
+            catch (Exception ex)
+            {
+                error = $"Failed to load file: {ex.Message}";
+                Logger.LogError("File: {FileName} Error: {Error}", file.Name, ex.Message);
+            }
+            finally
+            {
+                isLoading = false;
+                UpdateState();
+            }
+        }
+
+        
+    }
+
+    private void UpdateState()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+}

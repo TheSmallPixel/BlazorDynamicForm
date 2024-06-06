@@ -1,18 +1,10 @@
-﻿
-using System.Diagnostics;
-using System.Dynamic;
-using System.Security.Cryptography.X509Certificates;
-using BlazorDynamicForm;
-using BlazorDynamicForm.Attributes.Display;
+﻿using BlazorDynamicForm.Attributes;
+using BlazorDynamicForm.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using TypeAnnotationParser;
 
 namespace BlazorDynamicFormTest.Server.Controllers
 {
-    public  class testData
-    {
-        public string Provola { get; set; } = "tadaaa";
-    }
     [ApiController]
     [Route("[controller]")]
     public class DefinitionController : ControllerBase
@@ -20,23 +12,12 @@ namespace BlazorDynamicFormTest.Server.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            var def = DataAnnotationParser.ReadDataAnnotationsAsJson<TestLol>((option) =>
+            var def = TypeAnnotationParserExtension.Parse<TestLol>((option) =>
             {
-                option.Attributes.Add(typeof(TextAreaAttribute));
+                option.Attributes.Add(new Annotation(typeof(DynamicRendererComponent), true));
+                option.Attributes.Add(new Annotation(typeof(DisplayFormAttribute), true));
             });
-            //var data = def.CreateObject((option) =>
-            //{
-            //    option.InitStringsEmpty = true;
-            //    option.MaxRecursiveDepth = 10;
-            //});
-            //var isValid = def.Validate(data);
-            //dynamic dataTest = new ExpandoObject();       
-            //dataTest.Provola = "bella";
-            //var isValid2 = def.Validate(dataTest as ExpandoObject);
-            //var dataTest2 = new testData();
-            //var isValid3 = def.Validate(dataTest2);
-            //var json = JsonConvert.SerializeObject(data, Formatting.None);
-            return Ok(def);
+            return Ok(def.AsJson());
         }
     }
 

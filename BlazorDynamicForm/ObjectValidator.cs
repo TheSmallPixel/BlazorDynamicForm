@@ -8,28 +8,29 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TypeAnnotationParser;
 
 namespace BlazorDynamicForm
 {
     public static class ObjectValidator
     {
 
-        public static bool Validate(this FormMap definition, object propertyValue)
+        public static bool Validate(this TypeAnnotationModel definition, object propertyValue)
         {
             return Validate(definition, definition.EntryType, propertyValue);
         }
-        public static bool Validate(this FormMap definition, string key, object propertyValue)
+        public static bool Validate(this TypeAnnotationModel definition, string key, object propertyValue)
         {
             if (propertyValue == null) return false;
             var prop = definition.Properties[key];
             // Type dataType = data.GetType();
             switch (prop.PropertyType)
             {
-                case FormPropertyType.Primitive:
+                case PropertyType.Primitive:
                     if (propertyValue == null) return true; // Consider what should happen if null is not allowed
                     Type expectedType = Type.GetType(prop.Type);
                     return expectedType.IsInstanceOfType(propertyValue);
-                case FormPropertyType.Object:
+                case PropertyType.Object:
                     //var objectData = propertyValue as IDictionary<string, object>;
                     //if (objectData == null) return true;
 
@@ -74,7 +75,7 @@ namespace BlazorDynamicForm
                     }
 
                     return true;
-                case FormPropertyType.Collection:
+                case PropertyType.Collection:
                     var collectionData = propertyValue as IEnumerable;
                     if (collectionData == null) return true;
                     var keyType = prop.Properties.First().Value;
@@ -86,7 +87,7 @@ namespace BlazorDynamicForm
                         }
                     }
                     return true;
-                case FormPropertyType.Dictionary:
+                case PropertyType.Dictionary:
 
                     var dicKey = prop.Properties.First().Value;
                     var dicValue = prop.Properties.Last().Value;

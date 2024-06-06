@@ -1,8 +1,8 @@
 ﻿namespace BlazorDynamicForm.Attributes.Display;
 
-public class DisplayNameForm : DisplayForm
+public class DisplayNameFormAttribute : DisplayFormAttribute
 {
-    public DisplayNameForm(string name)
+    public DisplayNameFormAttribute(string name)
     {
         Name = name;
     }

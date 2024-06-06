@@ -1,29 +1,21 @@
 ﻿using BlazorDynamicForm.Entities;
+using TypeAnnotationParser;
 
 namespace BlazorDynamicForm
 {
-    public record ObjectGeneratorOptions
-    {
-        public int MaxRecursiveDepth { get; set; } = 10;
-        public bool InitStringsEmpty { get; set; } = true;
-
-        public bool CreateCollectionElement { get; set; } = false;
-        public bool CreateDictionaryElement { get; set; } = false;
-        public bool CreateObjectElement { get; set; } = false;
-    }
     public static class ObjectGenerator
     {
-        public static object? CreateObject(this FormMap definition, Action<ObjectGeneratorOptions>? options = null)
+        public static object? CreateObject(this TypeAnnotationModel definition, Action<ObjectGeneratorOptions>? options = null)
         {
             return CreateObject(definition, definition.EntryType, options);
         }
-        public static object? CreateObject(this FormMap definition, string key, Action<ObjectGeneratorOptions> options = null)
+        public static object? CreateObject(this TypeAnnotationModel definition, string key, Action<ObjectGeneratorOptions> options = null)
         {
             var optionData = new ObjectGeneratorOptions();
             options?.Invoke(optionData);
             return CreateObject(definition, optionData, key);
         }
-        public static object? CreateObject(this FormMap definition, ObjectGeneratorOptions options, string key, int depth = 0, bool canBeNull = true)
+        public static object? CreateObject(this TypeAnnotationModel definition, ObjectGeneratorOptions options, string key, int depth = 0, bool canBeNull = true)
         {
             if (!definition.Properties.ContainsKey(key))
             {
@@ -37,9 +29,9 @@ namespace BlazorDynamicForm
             var prop = definition.Properties[key];
             switch (prop.PropertyType)
             {
-                case FormPropertyType.Primitive:
+                case PropertyType.Primitive:
                     return GetDefaultType(prop, options, canBeNull);
-                case FormPropertyType.Object:
+                case PropertyType.Object:
                     var objectData = new Dictionary<string, object>();
                     if (options.CreateObjectElement || depth < 2 && !options.CreateObjectElement)
                     {
@@ -49,7 +41,7 @@ namespace BlazorDynamicForm
                         }
                     }
                     return objectData;
-                case FormPropertyType.Collection:
+                case PropertyType.Collection:
                     var collectionData = new List<object>();
                     if (options.CreateCollectionElement)
                     {
@@ -58,7 +50,7 @@ namespace BlazorDynamicForm
                     }
 
                     return collectionData;
-                case FormPropertyType.Dictionary:
+                case PropertyType.Dictionary:
                     var dictionaryData = new Dictionary<string, object>();
                     if (options.CreateDictionaryElement)
                     {
@@ -83,7 +75,7 @@ namespace BlazorDynamicForm
             }
         }
 
-        private static object? GetDefaultType(FormProperty prop, ObjectGeneratorOptions options, bool canBeNull)
+        private static object? GetDefaultType(TypeAnnotationProperty prop, ObjectGeneratorOptions options, bool canBeNull)
         {
             var type = Type.GetType(prop.Type);
             if (type.IsValueType)

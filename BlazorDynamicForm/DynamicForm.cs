@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 using System.Dynamic;
 using BlazorDynamicForm.Entities;
 using BlazorDynamicForm.Utility;
+using TypeAnnotationParser;
 
 namespace BlazorDynamicForm
 {
@@ -13,7 +14,7 @@ namespace BlazorDynamicForm
         public ExpandoObject DataObject { get; set; }
 
         [Parameter]
-        public FormMap FormDefinition { get; set; }
+        public TypeAnnotationModel FormDefinition { get; set; }
 
         [Parameter]
         public EventCallback<ExpandoObject?> OnValidSubmit { get; set; }
@@ -29,11 +30,6 @@ namespace BlazorDynamicForm
 
         [Inject]
         private DynamicFormConfiguration Configuration { get; set; }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-        }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
@@ -166,16 +162,5 @@ namespace BlazorDynamicForm
         {
             await OnValidSubmit.InvokeAsync(DataObject);
         }
-    }
-
-    public class FieldTemplateContext
-    {
-        public FieldTemplateContext(FormProperty formProperty, RenderFragment dynamicComponent)
-        {
-            DynamicComponent = dynamicComponent;
-            FormProperty = formProperty;
-        }
-        public RenderFragment DynamicComponent { get; private set; }
-        public FormProperty FormProperty { get; private set; }
     }
 }

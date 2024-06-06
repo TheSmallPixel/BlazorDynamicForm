@@ -1,4 +1,5 @@
 ﻿using BlazorDynamicForm.Components;
+using TypeAnnotationParser;
 
 namespace BlazorDynamicForm.Entities
 {
@@ -11,7 +12,9 @@ namespace BlazorDynamicForm.Entities
         public Dictionary<Type, Type> PrimitiveRenderer { get; private set; } = new();
       
         public Dictionary<Type, Type> CustomAttributeRenderer { get; private set; } = new();
-        
+
+        public Dictionary<string, Type> CustomRenderer { get; private set; } = new();
+
         public void AddObjectRenderer<T>() where T : FormComponentBase
         {
             ObjectRenderer = typeof(T);
@@ -30,12 +33,18 @@ namespace BlazorDynamicForm.Entities
             PrimitiveRenderer[typeof(T)] = typeof(R);
         }
 
-        public void AddCustomRenderer<T, R>() where R : FormComponentBase where T : DynamicRendererComponent
+        public void AddCustomAttributeRenderer<T, R>() where R : FormComponentBase where T : DynamicRendererComponent
         {
             CustomAttributeRenderer[typeof(T)] = typeof(R);
         }
 
-        public Type GetElement(FormProperty property)
+        public void AddCustomRenderer<T, R>() where R : FormComponentBase
+        {
+            CustomRenderer[typeof(T).FullName] = typeof(R);
+        }
+
+
+        public Type GetElement(TypeAnnotationProperty property)
         {
             var customRenderer = property.Attributes?.OfType<DynamicRendererComponent>().FirstOrDefault();
 
@@ -46,31 +55,29 @@ namespace BlazorDynamicForm.Entities
                     return component;
                 }
             }
+
+            if (!string.IsNullOrWhiteSpace(property.Type) && CustomRenderer.TryGetValue(property.Type, out var customElement))
+            {
+                return customElement;
+            }
+
             switch (property.PropertyType)
             {
-                case FormPropertyType.Primitive:
+                case PropertyType.Primitive:
                     if (PrimitiveRenderer.TryGetValue(Type.GetType(property.Type), out var element))
                     {
                         return element;
                     }
                     throw new InvalidOperationException("Invalid property found");
-                case FormPropertyType.Object:
+                case PropertyType.Object:
                     return ObjectRenderer;
-                case FormPropertyType.Collection:
+                case PropertyType.Collection:
                     return CollectionRenderer;
-                case FormPropertyType.Dictionary:
+                case PropertyType.Dictionary:
                     return DictionaryRenderer;
                 default:
                     throw new InvalidOperationException("Invalid property found");
             }
         }
     }
-
-    public abstract class DynamicRendererComponent : Attribute { }
-
-    public class CodeEditor : DynamicRendererComponent
-    {
-
-    }
-
 }
