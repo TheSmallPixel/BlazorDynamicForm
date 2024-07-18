@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System.Dynamic;
-using BlazorDynamicForm.Entities;
 using BlazorDynamicForm.Utility;
 using TypeAnnotationParser;
 
-namespace BlazorDynamicForm
+namespace BlazorDynamicForm.Core
 {
     public class DynamicForm : ComponentBase
     {
@@ -96,7 +94,10 @@ namespace BlazorDynamicForm
 
             void Component(RenderTreeBuilder builder)
             {
-                builder.OpenComponent(sequence++, Configuration.GetElement(property));
+                var component = Configuration.GetElement(property);
+                if (component == null)
+                    return;
+                builder.OpenComponent(sequence++, component);
                 builder.AddAttribute(sequence++, "Form", this);
                 builder.AddAttribute(sequence++, "PropertyName", propertyName);
                 builder.AddAttribute(sequence++, "PropertyType", key);
@@ -144,9 +145,11 @@ namespace BlazorDynamicForm
                 }
             };
 
-            RenderFragment component = (builder) =>
+            void Component(RenderTreeBuilder builder)
             {
-                builder.OpenComponent(sequence++, Configuration.GetElement(property));
+                var component = Configuration.GetElement(property);
+                if (component == null)
+                    return;
                 builder.AddAttribute(sequence++, "Form", this);
                 builder.AddAttribute(sequence++, "PropertyName", index.ToString());
                 builder.AddAttribute(sequence++, "PropertyType", key);
@@ -155,7 +158,7 @@ namespace BlazorDynamicForm
                 builder.AddAttribute(sequence++, "Value", value);
                 builder.CloseComponent();
             };
-            return FieldTemplate(new FieldTemplateContext(property, component));
+            return FieldTemplate(new FieldTemplateContext(property, Component));
         }
 
         private async Task HandleSubmitAsync()

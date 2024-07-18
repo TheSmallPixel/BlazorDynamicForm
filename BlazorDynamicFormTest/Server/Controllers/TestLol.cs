@@ -1,4 +1,4 @@
-﻿using BlazorDynamicForm.Attributes.Display;
+﻿using BlazorDynamicForm.Attributes;
 
 namespace BlazorDynamicFormTest.Server.Controllers;
 
@@ -22,6 +22,9 @@ public class TestLol
 
     [MultipleSelect("Yes", "no", "boh")]
     public string MultipleSelectMeee { get; set; }
+
+
+    public bool TestBoolean { get; set; }
 }
 
 public class SwitchOption

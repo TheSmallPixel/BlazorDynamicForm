@@ -1,6 +1,6 @@
-﻿using BlazorDynamicForm.Entities;
+﻿using BlazorDynamicForm.Core;
 
-namespace BlazorDynamicForm.Attributes.Display;
+namespace BlazorDynamicForm.Attributes;
 
 /// <summary>
 /// Monaco: <see cref="https://microsoft.github.io/monaco-editor/"/> 

@@ -1,9 +1,11 @@
-﻿@inherits FormComponentBase
+﻿@using BlazorDynamicForm.Attributes
+@using BlazorMonaco.Editor
 @using Microsoft.AspNetCore.Components.Forms
 @using BlazorMonaco
 @using BlazorMonaco.Editor
 @using BlazorMonaco.Languages
-@using BlazorDynamicForm.Attributes.Display
+@inherits BlazorDynamicForm.Core.FormComponentBase
+
 
 <div class="row">
     <label for="@PropertyType" class="col-sm-2 col-form-label">@PropertyName</label>

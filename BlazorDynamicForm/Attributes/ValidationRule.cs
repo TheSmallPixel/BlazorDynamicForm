@@ -1,7 +1,6 @@
-﻿using BlazorDynamicForm.Entities;
-using TypeAnnotationParser;
+﻿using TypeAnnotationParser;
 
-namespace BlazorDynamicForm.Attributes.Validation;
+namespace BlazorDynamicForm.Attributes;
 
 public abstract class ValidationRule : Attribute
 {

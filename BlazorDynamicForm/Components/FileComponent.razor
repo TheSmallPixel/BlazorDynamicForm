@@ -1,8 +1,11 @@
-﻿@inherits FormComponentBase
-@inject ILogger<FileComponent> Logger
+﻿@using BlazorDynamicForm.Attributes
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Logging
-@using BlazorDynamicForm.Attributes.Display
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Logging
+@inherits BlazorDynamicForm.Core.FormComponentBase
+@inject ILogger<FileComponent> Logger
+
 <div class="row">
     <label for="@PropertyType" class="col-sm-2 col-form-label">@PropertyName</label>
     <div class="col-sm-10">

@@ -1,4 +1,4 @@
-﻿ using BlazorDynamicForm.Attributes.Display;
+﻿ using BlazorDynamicForm.Attributes;
 
 
 namespace BlazorDynamicFormTest.Server.Controllers;

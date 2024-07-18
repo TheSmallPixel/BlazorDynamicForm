@@ -1,8 +1,7 @@
-﻿using BlazorDynamicForm.Entities;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using TypeAnnotationParser;
 
-namespace BlazorDynamicForm;
+namespace BlazorDynamicForm.Core;
 
 public class FieldTemplateContext
 {

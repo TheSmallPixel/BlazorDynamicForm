@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace BlazorDynamicForm.Components
+namespace BlazorDynamicForm.Core
 {
     public abstract class FormComponentBase : ComponentBase
     {
-        [Parameter] 
+        [Parameter]
         public DynamicForm Form { get; set; }
         [Parameter]
         public string PropertyName { get; set; }

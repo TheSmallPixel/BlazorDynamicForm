@@ -1,5 +1,5 @@
 ﻿using BlazorDynamicForm.Attributes;
-using BlazorDynamicForm.Entities;
+using BlazorDynamicForm.Core;
 using Microsoft.AspNetCore.Mvc;
 using TypeAnnotationParser;
 

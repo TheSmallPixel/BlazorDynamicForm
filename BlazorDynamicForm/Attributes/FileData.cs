@@ -1,4 +1,4 @@
-﻿namespace BlazorDynamicForm.Attributes.Display;
+﻿namespace BlazorDynamicForm.Attributes;
 
 public record FileData
 {

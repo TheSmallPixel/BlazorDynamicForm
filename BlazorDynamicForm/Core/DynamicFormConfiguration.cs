@@ -1,7 +1,7 @@
-﻿using BlazorDynamicForm.Components;
+﻿using Microsoft.Extensions.Logging;
 using TypeAnnotationParser;
 
-namespace BlazorDynamicForm.Entities
+namespace BlazorDynamicForm.Core
 {
     public class DynamicFormConfiguration
     {
@@ -10,10 +10,17 @@ namespace BlazorDynamicForm.Entities
         public Type DictionaryRenderer { get; private set; }
 
         public Dictionary<Type, Type> PrimitiveRenderer { get; private set; } = new();
-      
+
         public Dictionary<Type, Type> CustomAttributeRenderer { get; private set; } = new();
 
         public Dictionary<string, Type> CustomRenderer { get; private set; } = new();
+
+        private readonly ILogger<DynamicFormConfiguration> _logger;
+
+        public DynamicFormConfiguration(ILogger<DynamicFormConfiguration> logger)
+        {
+            _logger = logger;
+        }
 
         public void AddObjectRenderer<T>() where T : FormComponentBase
         {
@@ -44,7 +51,7 @@ namespace BlazorDynamicForm.Entities
         }
 
 
-        public Type GetElement(TypeAnnotationProperty property)
+        public Type? GetElement(TypeAnnotationProperty property)
         {
             var customRenderer = property.Attributes?.OfType<DynamicRendererComponent>().FirstOrDefault();
 
@@ -68,7 +75,8 @@ namespace BlazorDynamicForm.Entities
                     {
                         return element;
                     }
-                    throw new InvalidOperationException("Invalid property found");
+                    _logger.LogError("Invalid primitive property type: {PropertyType}", property.Type);
+                    return null;
                 case PropertyType.Object:
                     return ObjectRenderer;
                 case PropertyType.Collection:
@@ -76,7 +84,8 @@ namespace BlazorDynamicForm.Entities
                 case PropertyType.Dictionary:
                     return DictionaryRenderer;
                 default:
-                    throw new InvalidOperationException("Invalid property found");
+                    _logger.LogError("Unsupported property type encountered: {PropertyType}", property.PropertyType);
+                    return null;
             }
         }
     }

@@ -1,3 +1,3 @@
-﻿namespace BlazorDynamicForm.Entities;
+﻿namespace BlazorDynamicForm.Core;
 
 public abstract class DynamicRendererComponent : Attribute { }

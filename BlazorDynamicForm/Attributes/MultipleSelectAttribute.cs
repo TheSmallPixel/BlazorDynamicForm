@@ -1,11 +1,11 @@
-﻿using BlazorDynamicForm.Entities;
+﻿using BlazorDynamicForm.Core;
 
-namespace BlazorDynamicForm.Attributes.Display;
+namespace BlazorDynamicForm.Attributes;
 
 public class MultipleSelectAttribute : DynamicRendererComponent
 {
     public string[] Options { get; set; }
-    public MultipleSelectAttribute(){}
+    public MultipleSelectAttribute() { }
 
     public MultipleSelectAttribute(params string[] options)
     {

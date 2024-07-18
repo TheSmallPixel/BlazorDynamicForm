@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using BlazorDynamicForm.Entities;
 using TypeAnnotationParser;
 
-namespace BlazorDynamicForm.Attributes.Validation;
+namespace BlazorDynamicForm.Attributes;
 
 public class RequiredRule : ValidationRule
 {

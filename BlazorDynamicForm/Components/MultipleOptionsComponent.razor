@@ -1,6 +1,7 @@
-﻿@inherits FormComponentBase
-@using Microsoft.AspNetCore.Components.Forms
-@using BlazorDynamicForm.Attributes.Display
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using BlazorDynamicForm.Attributes
+@inherits BlazorDynamicForm.Core.FormComponentBase
+
 <div class="row">
     <label for="@PropertyType" class="col-sm-2 col-form-label">@PropertyName</label>
     <div class="col-sm-10">
