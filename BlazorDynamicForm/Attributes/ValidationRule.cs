@@ -15,7 +15,7 @@ public abstract class ValidationRule : Attribute
 
     public string PropertyName { get; set; }
 
-    public virtual bool IsValid(TypeAnnotationModel map, object? value)
+    public virtual bool IsValid(SchemeModel map, object? value)
     {
         return true;
     }

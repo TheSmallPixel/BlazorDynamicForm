@@ -5,11 +5,11 @@ namespace BlazorDynamicForm.Core;
 
 public class FieldTemplateContext
 {
-    public FieldTemplateContext(TypeAnnotationProperty typeAnnotationProperty, RenderFragment dynamicComponent)
+    public FieldTemplateContext(SchemeProperty schemeProperty, RenderFragment dynamicComponent)
     {
         DynamicComponent = dynamicComponent;
-        TypeAnnotationProperty = typeAnnotationProperty;
+        SchemeProperty = schemeProperty;
     }
     public RenderFragment DynamicComponent { get; private set; }
-    public TypeAnnotationProperty TypeAnnotationProperty { get; private set; }
+    public SchemeProperty SchemeProperty { get; private set; }
 }

@@ -1,0 +1,90 @@
+﻿@using System.Dynamic
+@using BlazorDynamicForm.Core
+@using TypeAnnotationParser
+@inject DynamicFormConfiguration Configuration
+
+
+<!-- A simple form element with an @onsubmit -->
+<form onsubmit="@HandleSubmitAsync" novalidate>
+	@if (Scheme?.Properties != null)
+	{
+		var componentType = Configuration.GetElement(Scheme, Scheme);
+		if (componentType is not null)
+		{
+			var parameters = new Dictionary<string, object?>
+			{
+				["Form"] = this,
+				["PropertyName"] = Scheme.Name,
+				["PropertyType"] = Scheme.Type,
+				["IsFirst"] = true,
+						["Value"] = DataObject,
+						["ValueChanged"] = EventCallback.Factory.Create<object?>(this, OnChildValueChanged)
+			};
+
+			<DynamicComponent Type="@componentType" Parameters="@parameters"/>
+		} else
+		{
+			<p class="text-danger">No component found for this scheme.</p>
+		}
+	}
+	@SubmitTemplate
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<hr />
+<p>Debug view of current data:</p>
+<pre>@System.Text.Json.JsonSerializer.Serialize(DataObject, new System.Text.Json.JsonSerializerOptions { WriteIndented = true })</pre>
+
+@code {
+	// Holds your data, which can be shaped by ExpandoObject
+	private ExpandoObject DataObject { get; set; } = new ExpandoObject();
+
+	// For convenience, a cast to IDictionary
+	private IDictionary<string, object?> DataDictionary => (IDictionary<string, object?>)DataObject;
+	[Parameter]
+	public EventCallback<ExpandoObject?> OnValidSubmit { get; set; }
+
+	[Parameter]
+	public RenderFragment SubmitTemplate { get; set; }
+	// The scheme that defines how the form should be built
+	[Parameter]
+	public SchemeModel? Scheme { get; set; }
+
+	protected override void OnInitialized()
+	{
+		// If needed, initialize "DataObject" or "Scheme" from services, etc.
+		// This is just a placeholder for demonstration.
+		base.OnInitialized();
+	}
+
+
+	private async Task HandleSubmitAsync()
+	{
+		// The @onsubmit handler won't do default form-post,
+		// but you can handle it here.
+		Console.WriteLine("Submitted form. Current data:");
+		Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(
+			DataObject, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+		await OnValidSubmit.InvokeAsync(DataObject);
+		// You could do any server call here, or trigger an EventCallback, etc.
+
+		// Or do your own logic: call a service, etc.
+	}
+
+	private void OnChildValueChanged(object? newValue)
+	{
+		// If it's truly your top-level object, you might just reassign:
+		// DataObject = (ExpandoObject)newValue;
+		// 
+		// Or, if it's a sub-property, you might do some dictionary updates.
+
+		// For simplicity, let's assume the child is passing the entire 
+		// updated ExpandoObject. Reassign:
+		if (newValue is ExpandoObject updatedObj)
+		{
+			DataObject = updatedObj;
+		}
+		// Force a re-render if needed:
+		StateHasChanged();
+	}
+}

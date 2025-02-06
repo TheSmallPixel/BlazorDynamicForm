@@ -4,33 +4,46 @@ namespace BlazorDynamicForm
 {
     public static class ObjectGenerator
     {
-        public static object? CreateObject(this TypeAnnotationModel definition, Action<ObjectGeneratorOptions>? options = null)
+        public static object? CreateObject(this SchemeModel definition, Action<ObjectGeneratorOptions>? options = null)
         {
-            return CreateObject(definition, definition.EntryType, options);
+            return CreateObject(definition, options);
         }
-        public static object? CreateObject(this TypeAnnotationModel definition, string key, Action<ObjectGeneratorOptions> options = null)
+        public static object? CreateObject(this SchemeModel definition, SchemeProperty key, Action<ObjectGeneratorOptions> options = null)
         {
             var optionData = new ObjectGeneratorOptions();
             options?.Invoke(optionData);
             return CreateObject(definition, optionData, key);
         }
-        public static object? CreateObject(this TypeAnnotationModel definition, ObjectGeneratorOptions options, string key, int depth = 0, bool canBeNull = true)
+        public static object? CreateObject(this SchemeModel definition, ObjectGeneratorOptions options, SchemeProperty prop, int depth = 0, bool canBeNull = true)
         {
-            if (!definition.Properties.ContainsKey(key))
-            {
-                throw new Exception($"Missing definition for this {key}");
-            }
+      
 
             if (depth >= options.MaxRecursiveDepth)
                 return null;
             depth++;
 
-            var prop = definition.Properties[key];
-            switch (prop.PropertyType)
+
+            if (!string.IsNullOrEmpty(prop.Ref))
             {
-                case PropertyType.Primitive:
-                    return GetDefaultType(prop, options, canBeNull);
-                case PropertyType.Object:
+	            //goto ref
+
+            }
+            else
+            {
+                //read
+            }
+
+            switch (prop.Type)
+            {
+                case PropertyType.Integer:
+	                return 0;
+                case PropertyType.Double:
+	                return 0d;
+                case PropertyType.Float:
+	                return 0f;
+                case PropertyType.String:
+	                return string.Empty;
+				case PropertyType.Object:
                     var objectData = new Dictionary<string, object>();
                     if (options.CreateObjectElement || depth < 2 && !options.CreateObjectElement)
                     {
@@ -40,12 +53,12 @@ namespace BlazorDynamicForm
                         }
                     }
                     return objectData;
-                case PropertyType.Collection:
+                case PropertyType.Array:
                     var collectionData = new List<object>();
                     if (options.CreateCollectionElement)
                     {
-                        var keyType = prop.Properties.First().Value;
-                        collectionData.Add(CreateObject(definition, options, keyType, depth));
+                       // var keyType = prop.Properties.First().Value;
+                       // collectionData.Add(CreateObject(definition, options, keyType, depth));
                     }
 
                     return collectionData;
@@ -60,11 +73,11 @@ namespace BlazorDynamicForm
                         if (dickObjectValue == null)
                         {
                             //this happen on max recursive lenght reaced point, just avoid to add anything
-                            //throw new Exception($"the dictionary key cannot be null, {dicKey}");
+                            //throw new Exception($"the dictionary prop cannot be null, {dicKey}");
                         }
                         else
                         {
-                            dictionaryData.Add(Guid.NewGuid().ToString(), dickObjectValue);
+                           // dictionaryData.Add(Guid.NewGuid().ToString(), dickObjectValue);
                         }
                     }
 
@@ -74,22 +87,6 @@ namespace BlazorDynamicForm
             }
         }
 
-        private static object? GetDefaultType(TypeAnnotationProperty prop, ObjectGeneratorOptions options, bool canBeNull)
-        {
-            var type = Type.GetType(prop.Type);
-            if (type.IsValueType)
-            {
-                return Activator.CreateInstance(type);
-            }
-            if (!canBeNull && type == typeof(string))
-            {
-                return Guid.NewGuid().ToString();
-            }
-            if (options.InitStringsEmpty && type == typeof(string))
-            {
-                return string.Empty;
-            }
-            return null;
-        }
+        
     }
 }

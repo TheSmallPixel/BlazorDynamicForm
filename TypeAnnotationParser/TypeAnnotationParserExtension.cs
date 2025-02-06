@@ -6,7 +6,7 @@ namespace TypeAnnotationParser;
 
 public static class TypeAnnotationParserExtension
 {
-    public static TypeAnnotationModel Parse(Type type, Action<ParserConfiguration>? getConfiguration = null)
+    public static SchemeModel Parse(Type type, Action<ParserConfiguration>? getConfiguration = null)
     {
         var configData = new ParserConfiguration();
         getConfiguration?.Invoke(configData);
@@ -14,7 +14,7 @@ public static class TypeAnnotationParserExtension
         return tap.Parse(type);
     }
 
-    public static TypeAnnotationModel Parse<T>(Action<ParserConfiguration>? getConfiguration = null)
+    public static SchemeModel Parse<T>(Action<ParserConfiguration>? getConfiguration = null)
     {
         var configData = new ParserConfiguration();
         getConfiguration?.Invoke(configData);

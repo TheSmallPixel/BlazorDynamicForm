@@ -5,7 +5,7 @@ namespace BlazorDynamicForm.Attributes;
 
 public class RequiredRule : ValidationRule
 {
-    public override bool IsValid(TypeAnnotationModel map, object? value)
+    public override bool IsValid(SchemeModel map, object? value)
     {
         if (value == null)
         {

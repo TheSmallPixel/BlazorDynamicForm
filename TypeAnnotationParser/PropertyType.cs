@@ -2,8 +2,12 @@
 
 public enum PropertyType
 {
-    Primitive,
+    Integer,
+    String,
+    Float,
+    Double,
     Object,
-    Collection,
-    Dictionary
+    Array,
+    Dictionary,
+    Enum
 }

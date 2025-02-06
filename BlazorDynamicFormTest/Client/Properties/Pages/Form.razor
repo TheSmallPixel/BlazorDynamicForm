@@ -32,7 +32,7 @@
     }
     private string Result { get; set; }
 
-    TypeAnnotationModel? definition;
+    SchemeModel? definition;
     // ExpandoObject? data;
     public static string? JsonData = null;
 
@@ -42,7 +42,7 @@
 
         var definitionRaw = await Http.GetStringAsync("Definition");
         Console.WriteLine(definitionRaw);
-        definition = TypeAnnotationModel.FromJson(definitionRaw);
+        definition = SchemeModel.FromJson(definitionRaw);
         StateHasChanged();
 
 

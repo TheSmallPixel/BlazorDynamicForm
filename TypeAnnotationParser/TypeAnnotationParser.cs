@@ -5,130 +5,169 @@ namespace TypeAnnotationParser;
 
 public class TypeAnnotationParser(ParserConfiguration configuration)
 {
-    public TypeAnnotationModel Parse<T>()
-    {
-        var type = typeof(T);
-        var form = new TypeAnnotationModel(type.Name);
-        AddFormProperty(form, type, type.Name, type.Name);
-        return form;
-    }
+	public SchemeModel Parse<T>()
+	{
+		var type = typeof(T);
+		var form = new SchemeModel();
+		AddFormProperty(form, form, type);
+		return form;
+	}
 
-    public TypeAnnotationModel Parse(Type type)
-    {
-        var form = new TypeAnnotationModel(type.Name);
-        AddFormProperty(form, type, type.Name, type.Name);
-        return form;
-    }
+	public SchemeModel Parse(Type type)
+	{
+		var form = new SchemeModel();
+		AddFormProperty(form, form, type);
+		return form;
+	}
 
-    private string GetUniquePropertyKey(Type parentType, PropertyInfo childProperty)
-    {
-        return $"#{parentType.Name}#{childProperty.Name}";
-    }
+	private string GetUniquePropertyKey(Type parentType)
+	{
+		return $"#{parentType.Name}";
+	}
 
-    private string AddFormProperty(TypeAnnotationModel typeAnnotationModel, Type propertyType, string? propertyName = null, string? propertyKey = null, PropertyInfo? propertyInfo = null)
-    {
-        if (typeAnnotationModel.Properties.ContainsKey(propertyKey))
-            return propertyKey;
+	private SchemeProperty AddFormProperty(SchemeModel scheme, SchemeProperty schemeProperty, Type propertyType, uint depth = 0, PropertyInfo? propertyInfo = null)
+	{
+		depth+=1;
+		if (depth >= 20)
+			return schemeProperty;
+		schemeProperty.Type = DeterminePropertyType(propertyType);
 
-        var prop = new TypeAnnotationProperty
-        {
-            Name = propertyInfo != null ? propertyName : propertyType.Name,
-            Type = propertyType.FullName ?? throw new InvalidOperationException("Property type must have a full name."),
-            PropertyType = DeterminePropertyType(propertyType)
-        };
+		//if (schemeProperty is not { Type: PropertyType.Object })
+		//	schemeProperty.Name = propertyInfo != null ? propertyInfo.Name : propertyType.Name;
+		if (schemeProperty.Type is PropertyType.Object)
+			schemeProperty.Name = propertyType.Name;
+		AssignAttributesToProperty(propertyType, schemeProperty);
+		if (propertyInfo != null)
+			AssignAttributesToProperty(propertyInfo, schemeProperty);
 
-        AssignAttributesToProperty(propertyType, prop);
-        if (propertyInfo != null)
-            AssignAttributesToProperty(propertyInfo, prop);
+		switch (schemeProperty.Type)
+		{
+			case PropertyType.Object:
+				{
+					foreach (var propInfo in propertyType.GetProperties())
+					{
+						var keyProp = GetUniquePropertyKey(propInfo.PropertyType);
+						if (!scheme.References.TryGetValue(keyProp, out var objectPropertyScheme))
+						{
+							if (DeterminePropertyType(propInfo.PropertyType) is PropertyType.Object)
+							{
+								scheme.References.TryAdd(keyProp, new SchemeProperty(){Type = PropertyType.Object});
+							}
+							objectPropertyScheme = AddFormProperty(scheme, new SchemeProperty(), propInfo.PropertyType, depth, propInfo);
+							if (objectPropertyScheme.Type is PropertyType.Object)
+								scheme.References[keyProp] = objectPropertyScheme;
+						}
+						schemeProperty.Properties ??= new();
+						//add reference
+						if (objectPropertyScheme.Type is PropertyType.Object)
+						{
+							schemeProperty.Properties.Add(propInfo.Name, new SchemeProperty() { Ref = keyProp });
+						}
+						else
+						{
+							schemeProperty.Properties.Add(propInfo.Name, objectPropertyScheme);
+						}
+					}
+					break;
+				}
+			case PropertyType.Array or PropertyType.Dictionary:
+				{
+					var elementTypes = GetBaseArrayType(propertyType);
+					foreach (var indexType in elementTypes)
+					{
+						var keyProp = GetUniquePropertyKey(indexType);
+						if (!scheme.References.TryGetValue(keyProp, out var objectPropertyScheme))
+						{
+							
+							objectPropertyScheme = AddFormProperty(scheme, new SchemeProperty(), indexType, depth);
+							if (objectPropertyScheme.Type is PropertyType.Object)
+								scheme.References.Add(keyProp, objectPropertyScheme);
+						}
+						schemeProperty.Indices ??= new();
+						if (objectPropertyScheme.Type is PropertyType.Object)
+						{
+							schemeProperty.Indices.Add(new SchemeProperty() { Ref = keyProp });
+						}
+						else
+						{
+							schemeProperty.Indices.Add(objectPropertyScheme);
+						}
+					}
+					break;
+				}
+			default:
+				break;
+		}
 
-        typeAnnotationModel.Properties.Add(propertyKey, prop);
-        ProcessPropertyType(typeAnnotationModel, propertyType, prop);
-        return propertyKey;
-    }
 
-    private void ProcessPropertyType(TypeAnnotationModel typeAnnotationModel, Type propertyType, TypeAnnotationProperty prop)
-    {
-        switch (prop.PropertyType)
-        {
-            case PropertyType.Object:
-                {
-                    prop.Properties = new();
-                    foreach (var propInfo in propertyType.GetProperties())
-                    {
-                        var key = GetUniquePropertyKey(propertyType, propInfo);
-                        var realKey = AddFormProperty(typeAnnotationModel, propInfo.PropertyType, propInfo.Name, key, propInfo);
-                        prop.Properties.Add(propInfo.Name, realKey);
-                    }
-                    break;
-                }
-            case PropertyType.Collection or PropertyType.Dictionary:
-                {
-                    prop.Type = null;
-                    var elementTypes = GetBaseArrayType(propertyType);
-                    for (var index = 0; index < elementTypes.Length; index++)
-                    {
-                        prop.Properties ??= new();
-                        var elementType = elementTypes[index];
-                        var key = AddFormProperty(typeAnnotationModel, elementType, "", Guid.NewGuid().ToString());
-                        prop.Properties.Add(index.ToString(), key);
-                    }
-                    break;
-                }
-            default:
-                break;
-        }
-    }
+		return schemeProperty;
+	}
 
-    private void AssignAttributesToProperty(MemberInfo property, TypeAnnotationProperty typeAnnotationProperty)
-    {
-        foreach (var annotation in configuration.Attributes)
-        {
-            AddAttributeToProperty(annotation.Type, property, typeAnnotationProperty, annotation.Inherit);
-        }
-    }
+	private void AssignAttributesToProperty(MemberInfo property, SchemeProperty schemeProperty)
+	{
+		var attributes = property.GetCustomAttributes(typeof(AttributeScheme), true).Cast<AttributeScheme>().ToList();
+		if (!attributes.Any()) return;
+		schemeProperty.Attributes ??= [];
+		schemeProperty.Attributes.AddRange(attributes);
+	}
 
-    private void AddAttributeToProperty(Type attrType, ICustomAttributeProvider property, TypeAnnotationProperty typeAnnotationProperty, bool inherit)
-    {
-        var attributes = property.GetCustomAttributes(attrType, inherit).Cast<Attribute>().ToList();
-        if (attributes.Any())
-        {
-            typeAnnotationProperty.Attributes ??= [];
-            typeAnnotationProperty.Attributes.AddRange(attributes);
-        }
-    }
+	public PropertyType DeterminePropertyType(Type type)
+	{
+		if (type == null)
+			throw new ArgumentNullException(nameof(type));
 
-    private PropertyType DeterminePropertyType(Type type)
-    {
-        if (type.IsPrimitive || type.IsValueType || type == typeof(string) || type.IsEnum)
-        {
-            return PropertyType.Primitive;
-        }
-        if (typeof(IList).IsAssignableFrom(type))
-        {
-            return PropertyType.Collection;
-        }
-        if (typeof(IDictionary).IsAssignableFrom(type))
-        {
-            return PropertyType.Dictionary;
-        }
-        return PropertyType.Object;
-    }
+		// Check for Enum first because enums are treated as value types.
+		if (type.IsEnum)
+			return PropertyType.Enum;
 
-    private Type[] GetBaseArrayType(Type type)
-    {
-        if (type.IsArray)
-        {
-            return [type.GetElementType()!];
-        }
+		// Handle the string type.
+		if (type == typeof(string))
+			return PropertyType.String;
 
-        if (typeof(IEnumerable).IsAssignableFrom(type) || typeof(IDictionary).IsAssignableFrom(type))
-        {
-            if (type.IsGenericType)
-            {
-                return type.GetGenericArguments();
-            }
-            return Array.Empty<Type>();
-        }
-        return Array.Empty<Type>();
-    }
+		// Check for specific numeric types.
+		if (type == typeof(float))
+			return PropertyType.Float;
+
+		if (type == typeof(double))
+			return PropertyType.Double;
+
+		// Check for various integer types.
+		if (type == typeof(byte) || type == typeof(sbyte) ||
+			type == typeof(short) || type == typeof(ushort) ||
+			type == typeof(int) || type == typeof(uint) ||
+			type == typeof(long) || type == typeof(ulong))
+		{
+			return PropertyType.Integer;
+		}
+
+		// Arrays and collections: 
+		// Check if the type is an array or implements IList.
+		if (type.IsArray || typeof(IList).IsAssignableFrom(type))
+			return PropertyType.Array;
+
+		// Check if the type implements IDictionary.
+		if (typeof(IDictionary).IsAssignableFrom(type))
+			return PropertyType.Dictionary;
+
+		// Fallback to object for any other type.
+		return PropertyType.Object;
+	}
+
+	private Type[] GetBaseArrayType(Type type)
+	{
+		if (type.IsArray)
+		{
+			return [type.GetElementType()!];
+		}
+
+		if (typeof(IEnumerable).IsAssignableFrom(type) || typeof(IDictionary).IsAssignableFrom(type))
+		{
+			if (type.IsGenericType)
+			{
+				return type.GetGenericArguments();
+			}
+			return Array.Empty<Type>();
+		}
+		return Array.Empty<Type>();
+	}
 }
