@@ -1,52 +1,141 @@
 ﻿@page "/"
 @using System.Dynamic
-@using BlazorDynamicForm.Core
+@using BlazorDynamicForm.Components
+@using Newtonsoft.Json
 @using TypeAnnotationParser
+@using YamlDotNet.Serialization
+@using YamlDotNet.Serialization.NamingConventions
 
 
 @inject HttpClient Http
 
-@if (definition != null)
-{
-    <DynamicForm FormDefinition="@definition" OnValidSubmit="@OnValidResult">
-        <FieldTemplate Context="template">
+
+<DynamicForm Scheme="@_scheme" OnValidSubmit="@OnValidResult">
+	@*  <FieldTemplate Context="template">
             @template.DynamicComponent
-        </FieldTemplate>
-        <SubmitTemplate>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-        </SubmitTemplate>
-    </DynamicForm>
+        </FieldTemplate> *@
+	<SubmitTemplate>
+		<div class="col-12">
+			<button type="submit" class="btn btn-primary">Save</button>
+		</div>
+	</SubmitTemplate>
+</DynamicForm>
+
+@if (!string.IsNullOrEmpty(SerializedJson))
+{
+	<pre>@SerializedJson</pre>
 }
 
-
-<p>@Result</p>
 @code {
+	string _rawScheme = @"references:
+  '#Cube':
+    name: Cube
+    type: Object
+    properties:
+      Value:
+        type: Integer
+        attributes:
+        - !SelectBox
+          options:
+          - 1
+          - 2
+  '#Test':
+    name: Test
+    type: Object
+    properties:
+      Name:
+        type: String
+        attributes:
+        - !CodeEditor
+          lang: chsarp
+      M1:
+        ref: '#Cube'
+      M3:
+        ref: '#Cube'
+      M4:
+        ref: '#Cube'
+      M2:
+        type: Array
+        indices:
+        - ref: '#Cube'
+name: Test
+type: Object
+properties:
+  Name:
+    type: String
+    attributes:
+    - !CodeEditor
+      lang: chsarp
+  M1:
+    ref: '#Cube'
+  M3:
+    ref: '#Cube'
+  M4:
+    ref: '#Cube'
+  M2:
+    type: Array
+    indices:
+    - ref: '#Cube'
+  Data:
+    ref: '#Test'
+  Data2:
+    type: Array
+    indices:
+    - ref: '#Test'
+";
 
+	void OnValidResult(IDictionary<string, object>? data)
+	{
+		if (data is not null)
+		{
+			// Serialize using Newtonsoft.Json
+            SerializedJson = JsonConvert.SerializeObject(data, Formatting.Indented);
+            Console.WriteLine(SerializedJson);
+		}
+		else
+		{
+            SerializedJson = "Form returned null data.";
+		}
+	}
 
-    void OnValidResult(ExpandoObject? data)
-    {
-        JsonData = definition.SerializeObject(data);
-        Console.WriteLine(JsonData);
-    }
-    private string Result { get; set; }
+	private SchemeModel _scheme;
+	// ExpandoObject? data;
+	public string? SerializedJson = null;
 
-    SchemeModel? definition;
-    // ExpandoObject? data;
-    public static string? JsonData = null;
+	protected override void OnParametersSet()
+	{
+		if (_scheme == null)
+		{
+			throw new InvalidOperationException($"{nameof(_scheme)} parameter is required.");
+		}
 
+		base.OnParametersSet();
+	}
+	protected override async Task OnInitializedAsync()
+	{
 
-    protected override async Task OnInitializedAsync()
-    {
+		_scheme = CreateScheme(_rawScheme);
 
-        var definitionRaw = await Http.GetStringAsync("Definition");
-        Console.WriteLine(definitionRaw);
-        definition = SchemeModel.FromJson(definitionRaw);
-        StateHasChanged();
+			await base.OnInitializedAsync();
+	}
 
+	public SchemeModel CreateScheme(string yaml)
+	{
+		List<Type> attributesTypes = new List<Type>()
+		{
+			typeof(CodeEditorAttribute),
+			typeof(SelectBoxAttribute),
+		};
 
-
-    }
+		var deserializerBuilder = new DeserializerBuilder()
+			.WithNamingConvention(LowerCaseNamingConvention.Instance);
+		foreach (var attribute in attributesTypes)
+		{
+			deserializerBuilder.WithTagMapping("!" + attribute.Name.Replace("Attribute", ""), attribute);
+		}
+		var deserializer = deserializerBuilder.Build();
+		var schemeDeserialize = deserializer.Deserialize<SchemeModel>(yaml);
+		return schemeDeserialize;
+	}
 
 }

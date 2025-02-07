@@ -3,41 +3,21 @@ using TypeAnnotationParser;
 
 namespace BlazorDynamicForm.Core
 {
-	public class DynamicFormConfiguration
+	public class DynamicFormConfiguration(ILogger<DynamicFormConfiguration> logger)
 	{
-		public Type ObjectRenderer { get; private set; }
-		public Type CollectionRenderer { get; private set; }
-		public Type DictionaryRenderer { get; private set; }
+		
 
-		public Dictionary<PropertyType, Type> PrimitiveRenderer { get; private set; } = new();
+		public Dictionary<PropertyType, Type> RendererMappings { get; private set; } = new();
 
 		public Dictionary<Type, Type> CustomAttributeRenderer { get; private set; } = new();
 
 		public Dictionary<PropertyType, Type> CustomRenderer { get; private set; } = new();
 
-		private readonly ILogger<DynamicFormConfiguration> _logger;
 
-		public DynamicFormConfiguration(ILogger<DynamicFormConfiguration> logger)
-		{
-			_logger = logger;
-		}
 
-		public void AddObjectRenderer<T>() where T : FormComponentBase
+		public void AddRenderer<R>(PropertyType type) where R : FormComponentBase
 		{
-			ObjectRenderer = typeof(T);
-		}
-		public void AddCollectionRenderer<T>() where T : FormComponentBase
-		{
-			CollectionRenderer = typeof(T);
-		}
-		public void AddDictionaryRenderer<T>() where T : FormComponentBase
-		{
-			DictionaryRenderer = typeof(T);
-		}
-
-		public void AddPrimitive<R>(PropertyType type) where R : FormComponentBase
-		{
-			PrimitiveRenderer[type] = typeof(R);
+			RendererMappings[type] = typeof(R);
 		}
 
 		public void AddCustomAttributeRenderer<T, R>() where R : FormComponentBase where T : DynamicRendererComponent
@@ -69,7 +49,7 @@ namespace BlazorDynamicForm.Core
 			else
 			{
 				var customRenderer = property.Attributes?.OfType<DynamicRendererComponent>().FirstOrDefault();
-				if (CustomAttributeRenderer.TryGetValue(customRenderer.GetType(), out var component))
+				if (customRenderer != null && CustomAttributeRenderer.TryGetValue(customRenderer.GetType(), out var component))
 				{
 					return component;
 				}
@@ -78,7 +58,7 @@ namespace BlazorDynamicForm.Core
 				{
 					return customElement;
 				}
-				if (PrimitiveRenderer.TryGetValue(property.Type.Value, out var element))
+				if (RendererMappings.TryGetValue(property.Type.Value, out var element))
 				{
 					return element;
 				}

@@ -8,6 +8,7 @@ public enum PropertyType
     Double,
     Object,
     Array,
+    File,
     Dictionary,
     Enum
 }

@@ -8,7 +8,7 @@
 
 
 <div class="row">
-    <label for="@PropertyType" class="col-sm-2 col-form-label">@PropertyName</label>
+    <label class="col-sm-2 col-form-label">@PropertyName</label>
     <div class="col-sm-10">
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">
@@ -17,7 +17,7 @@
                     <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
                 </svg>
             </span>
-            <StandaloneCodeEditor @ref="_codeEditor" OnDidChangeModelContent="Callback" Id="@PropertyType" ConstructionOptions="EditorConstructionOptions" CssClass="form-code-editor form-control" />
+            <StandaloneCodeEditor @ref="_codeEditor" OnDidChangeModelContent="Callback" Id="@PropertyName" ConstructionOptions="EditorConstructionOptions" CssClass="form-code-editor form-control" />
         </div>
     </div>
 </div>
@@ -28,9 +28,12 @@
 </style>
 @code {
     private StandaloneCodeEditor _codeEditor;
-    private string TypedValue => Convert.ToString(Value);
 
-
+    private string TypedValue
+    {
+	    get => Value?.ToString() ?? string.Empty;
+	    set => Value = value;
+    }
     protected override async Task OnParametersSetAsync()
     {
         if (!string.IsNullOrWhiteSpace(TypedValue))
@@ -41,7 +44,8 @@
 
     private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
     {
-        var config = Form.FormDefinition.Properties[PropertyType].Attributes.OfType<CodeEditorAttribute>().FirstOrDefault();
+	    var config = SchemeProperty.Attributes.OfType<CodeEditorAttribute>().FirstOrDefault();
+        
         return new StandaloneEditorConstructionOptions
             {
                 Theme = config.Theme,
@@ -53,7 +57,7 @@
 
     private async Task Callback(ModelContentChangedEvent obj)
     {
-        Value = await _codeEditor.GetValue();
+	    TypedValue = await _codeEditor.GetValue();
     }
 
 }

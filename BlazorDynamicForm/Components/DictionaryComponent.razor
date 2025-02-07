@@ -1,125 +1,131 @@
 ﻿@inherits BlazorDynamicForm.Core.FormComponentBase
+@inject DynamicFormConfiguration Configuration
+@using BlazorDynamicForm.Core
 @using Microsoft.AspNetCore.Components.Forms
 
 <div class="row pb-2">
-    <div class="col input-group">
-        <span class="input-group-text">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 .5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 4 .5m-4 2A.5.5 0 0 1 .5 2h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 4h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 8h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5" />
-            </svg>
-        </span>
-        <span class="input-group-text flex-grow-1">@PropertyName</span>
-        <Button @onclick="AddItem" class="btn btn-outline-secondary" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-            </svg>
-        </Button>
-    </div>
+	<div class="col input-group">
+		<span class="input-group-text">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
+				<path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 .5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 4 .5m-4 2A.5.5 0 0 1 .5 2h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 4h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 8h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5" />
+			</svg>
+		</span>
+		<span class="input-group-text flex-grow-1">@PropertyName</span>
+		<Button @onclick="AddItem" class="btn btn-outline-secondary" type="button">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+				<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+			</svg>
+		</Button>
+	</div>
 </div>
-@if (Value != null && Value is IDictionary<string, object> dic)
+@if (Value != null)
 {
-    foreach (var item in dic)
-    {
-        var itemValuePair = item;
-        string currentKey = item.Key;
-        if (!elementStatus.ContainsKey(currentKey))
-        {
-            elementStatus.Add(currentKey, false);
-        }
-        <div class="row pb-2 " style="padding-left: 3rem;">
-            <div class="col">
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-input-cursor" viewBox="0 0 16 16">
-                            <path d="M10 5h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4v1h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4zM6 5V4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" />
-                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13A.5.5 0 0 1 8 1" />
-                        </svg>
-                    </span>
-                    <InputText Value="@currentKey" ValueChanged="@(value => UpdateKey(item.Key, value))" ValueExpression="@(() => currentKey)" class="form-control" />
-                    @if (elementStatus[currentKey])
-                    {
-                        <Button @onclick="(e)=>Close(currentKey)" class="btn btn-outline-secondary" type="button">Close</Button>
+	foreach (var item in TypedValue)
+	{
+		var itemValuePair = item;
+		string currentKey = item.Key;
+		if (!_elementStatus.ContainsKey(currentKey))
+		{
+			_elementStatus.Add(currentKey, false);
+		}
+		<div class="row pb-2 " style="padding-left: 3rem;">
+			<div class="col">
+				<div class="input-group">
+					<span class="input-group-text">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-input-cursor" viewBox="0 0 16 16">
+							<path d="M10 5h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4v1h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4zM6 5V4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" />
+							<path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13A.5.5 0 0 1 8 1" />
+						</svg>
+					</span>
+					<InputText Value="@currentKey" ValueChanged="@(value => UpdateKey(item.Key, value))" ValueExpression="@(() => currentKey)" class="form-control" />
+					@if (_elementStatus[currentKey])
+					{
+						<Button @onclick="(e)=>Close(currentKey)" class="btn btn-outline-secondary" type="button">Close</Button>
 
-                    }
-                    else
-                    {
-                        <Button @onclick="(e)=>Open(currentKey)" class="btn btn-outline-secondary" type="button">Open</Button>
-                    }
-                    <Button @onclick="() => { RemoveItem(itemValuePair.Key); }" type="button" class="btn btn-danger">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                        </svg>
-                    </Button>
-                </div>
-            </div>
-        </div>
-        @if (elementStatus[currentKey])
-        {
-            <div class="row ps-3">
-                <div class="col">
-                    @Form.CreateComponents(_itemType, itemValuePair.Key, dic, true)
-                </div>
-            </div>
-        }
-    }
+					}
+					else
+					{
+						<Button @onclick="(e)=>Open(currentKey)" class="btn btn-outline-secondary" type="button">Open</Button>
+					}
+					<Button @onclick="() => { RemoveItem(itemValuePair.Key); }" type="button" class="btn btn-danger">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+							<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+							<path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+						</svg>
+					</Button>
+				</div>
+			</div>
+		</div>
+		@if (_elementStatus[currentKey])
+		{
+			<div class="row ps-3">
+				<div class="col">
+					@{
+						var itemProperty = SchemeProperty.Indices?.Last();
+						var componentType = Configuration.GetElement(SchemeModel, itemProperty);
+						var callback = EventCallback.Factory.Create<object?>(this, (object? newVal) =>
+						{
+							// Your update logic here
+							TypedValue[item.Key] = newVal;
+						});
+						var parameters = new Dictionary<string, object?>
+						{
+							["SchemeProperty"] = itemProperty,
+							["SchemeModel"] = SchemeModel,
+							["PropertyName"] = itemProperty.Name,
+							["IsFirst"] = true,
+							["Value"] = TypedValue[item.Key],
+							["ValueChanged"] = callback
+						};
+					}
+					<DynamicComponent Type="@componentType" Parameters="@parameters" />
+				</div>
+			</div>
+		}
+	}
 }
 
 @code {
 
-    private string _itemType;
-    private string _keyType;
+	private Dictionary<string, bool> _elementStatus = new();
 
-    private Dictionary<string, bool> elementStatus = new();
+	private IDictionary<string, object> TypedValue
+	{
+		get => (IDictionary<string, object>)Value ?? new Dictionary<string, object>();
+		set => Value = value;
+	}
+	private void Open(string key)
+	{
 
-    private string TypedValue(KeyValuePair<string, object> keyValuePair)
-    {
-        return keyValuePair.Key;
-    }
+		_elementStatus[key] = true;
+	}
 
-    private void Open(string key)
-    {
+	private void Close(string key)
+	{
+		_elementStatus[key] = false;
+	}
 
-        elementStatus[key] = true;
-    }
+	private void UpdateKey(string oldKey, string newKey)
+	{
+		if (TypedValue.ContainsKey(newKey)) return;
+		var value = TypedValue[oldKey];
+		TypedValue.Remove(oldKey);
+		TypedValue[newKey] = value;
+	}
 
-    private void Close(string key)
-    {
-        elementStatus[key] = false;
-    }
 
-    private void UpdateKey(string oldKey, string newKey)
-    {
-        if (Value is IDictionary<string, object> listValue && !listValue.ContainsKey(newKey))
-        {
-            var value = listValue[oldKey];
-            listValue.Remove(oldKey);
-            listValue[newKey] = value;
-            Value = listValue; // Re-assign to trigger UI update if necessary
-        }
-    }
+	private void RemoveItem(string key)
+	{
+		TypedValue.Remove(key);
+	}
 
-    protected override async Task OnParametersSetAsync()
-    {
-        _keyType = Form.FormDefinition.Properties[PropertyType].Properties.First().Value;
-        _itemType = Form.FormDefinition.Properties[PropertyType].Properties.Last().Value;
-    }
-
-    private void RemoveItem(string key)
-    {
-        if (Value is IDictionary<string, object> listValue)
-        {
-            listValue.Remove(key);
-        }
-    }
-    private void AddItem()
-    {
-        var data = Form.CreateObject(_itemType);
-
-        if (Value is IDictionary<string, object> listValue)
-        {
-            listValue.Add(Guid.NewGuid().ToString(), data);
-            Value = listValue;
-        }
-    }
+	private void AddItem()
+	{
+		var itemProperty = SchemeProperty.Indices.Single();
+		var item = SchemeModel.CreateOrValidateData(itemProperty, null);
+		if (item != null)
+		{
+			TypedValue.Add(Guid.NewGuid().ToString(), item);
+		}
+	}
 }

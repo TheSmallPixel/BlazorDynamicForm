@@ -3,38 +3,39 @@
 @inherits BlazorDynamicForm.Core.FormComponentBase
 
 <div class="row">
-    <label for="@PropertyType" class="col-sm-2 col-form-label">@PropertyName</label>
-    <div class="col-sm-10">
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-option" viewBox="0 0 16 16">
-                    <path d="M1 2.5a.5.5 0 0 1 .5-.5h3.797a.5.5 0 0 1 .439.26L11 13h3.5a.5.5 0 0 1 0 1h-3.797a.5.5 0 0 1-.439-.26L5 3H1.5a.5.5 0 0 1-.5-.5m10 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"/>
-                </svg>
-            </span>
-            <InputSelect @bind-Value:get="TypedValue" @bind-Value:set="OnValueChanged" id="@PropertyType" class="form-select form-control">
-                @foreach (var option in config.Options)
-                {
-                    <option value="@option">@option</option>
-                }
-            </InputSelect>
-        </div>
-    </div>
+	<label class="col-sm-2 col-form-label">@PropertyName</label>
+	<div class="col-sm-10">
+		<div class="input-group mb-3">
+			<span class="input-group-text" id="basic-addon1">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-option" viewBox="0 0 16 16">
+					<path d="M1 2.5a.5.5 0 0 1 .5-.5h3.797a.5.5 0 0 1 .439.26L11 13h3.5a.5.5 0 0 1 0 1h-3.797a.5.5 0 0 1-.439-.26L5 3H1.5a.5.5 0 0 1-.5-.5m10 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5" />
+				</svg>
+			</span>
+			<InputSelect @bind-Value="ValueChanged"  class="form-select form-control">
+				@foreach (var option in config.Options)
+				{
+					<option value="@option">@option</option>
+				}
+			</InputSelect>
+		</div>
+	</div>
 </div>
 @code {
-    private string TypedValue => Convert.ToString(Value);
-    private MultipleSelectAttribute config;
-    private void OnValueChanged(string newValue)
-    {
-        Value = newValue;
-    }
+	private string TypedValue
+	{
+		get => Value?.ToString() ?? string.Empty;
+		set => Value = value;
+	}
+	private MultipleSelectAttribute config;
 
 
-    protected override async Task OnParametersSetAsync()
-    {
-        config = Form.FormDefinition.Properties[PropertyType].Attributes.OfType<MultipleSelectAttribute>().First();
-        if (string.IsNullOrWhiteSpace(TypedValue))
-        {
-            Value = config.Options.First();
-        }
-    }
+
+	protected override async Task OnParametersSetAsync()
+	{
+		config = SchemeProperty.Attributes.OfType<MultipleSelectAttribute>().FirstOrDefault();
+		if (string.IsNullOrWhiteSpace(TypedValue))
+		{
+			TypedValue = config.Options.First();
+		}
+	}
 }

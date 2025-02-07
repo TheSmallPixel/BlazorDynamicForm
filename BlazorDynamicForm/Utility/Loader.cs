@@ -3,6 +3,8 @@ using BlazorDynamicForm.Components;
 using BlazorDynamicForm.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TypeAnnotationParser;
+using CodeEditorAttribute = BlazorDynamicForm.Attributes.CodeEditorAttribute;
 
 namespace BlazorDynamicForm.Utility;
 
@@ -14,16 +16,17 @@ public static class Loader
         {
             var logger = serviceProvider.GetRequiredService<ILogger<DynamicFormConfiguration>>();
             var config = new DynamicFormConfiguration(logger);
+            
 
-            config.AddPrimitive<float, FloatComponent>();
-            config.AddPrimitive<int, IntComponent>();
-            config.AddPrimitive<string, StringComponent>();
+			config.AddRenderer<FloatComponent>(PropertyType.Float);
+            config.AddRenderer<IntComponent>(PropertyType.Integer);
+            config.AddRenderer<StringComponent>(PropertyType.String);
 
-            config.AddObjectRenderer<ObjectComponent>();
-            config.AddCollectionRenderer<ListComponent>();
-            config.AddDictionaryRenderer<DictionaryComponent>();
+            config.AddRenderer<ObjectComponent>(PropertyType.Object);
+            config.AddRenderer<ListComponent>(PropertyType.Array);
+            config.AddRenderer<DictionaryComponent>(PropertyType.Dictionary);
 
-            config.AddCustomRenderer<FileData, FileComponent>();
+            config.AddCustomRenderer<FileComponent>(PropertyType.File);
 
             config.AddCustomAttributeRenderer<MultipleSelectAttribute, MultipleOptionsComponent>();
             config.AddCustomAttributeRenderer<CodeEditorAttribute, CodeEditorComponent>();
