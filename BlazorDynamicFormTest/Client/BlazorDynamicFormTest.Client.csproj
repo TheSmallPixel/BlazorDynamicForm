@@ -16,9 +16,6 @@
     
     
     <ProjectReference Include="..\..\BlazorDynamicForm\BlazorDynamicForm.csproj" />
-    
-    
-    <ProjectReference Include="..\Shared\BlazorDynamicFormTest.Shared.csproj" />
   </ItemGroup>
 
 </Project>

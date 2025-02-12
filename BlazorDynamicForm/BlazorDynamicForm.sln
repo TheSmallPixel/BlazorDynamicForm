@@ -3,17 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDynamicForm", "BlazorDynamicForm.csproj", "{CABBEFCE-EA59-46D2-ADCC-2149E1BA0A2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDynamicForm", "BlazorDynamicForm.csproj", "{CABBEFCE-EA59-46D2-ADCC-2149E1BA0A2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeAnnotationParser", "..\TypeAnnotationParser\TypeAnnotationParser.csproj", "{A09EFDFE-24D3-4505-8576-281B83F03217}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeAnnotationParser", "..\TypeAnnotationParser\TypeAnnotationParser.csproj", "{A09EFDFE-24D3-4505-8576-281B83F03217}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDynamicFormTest.Server", "..\BlazorDynamicFormTest\Server\BlazorDynamicFormTest.Server.csproj", "{400A278C-ADA9-47FF-BFFB-0FDCF7EC7B30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDynamicFormTest.Client", "..\BlazorDynamicFormTest\Client\BlazorDynamicFormTest.Client.csproj", "{08A56C15-85C8-4471-9BAA-9A26430717AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDynamicFormTest.Client", "..\BlazorDynamicFormTest\Client\BlazorDynamicFormTest.Client.csproj", "{08A56C15-85C8-4471-9BAA-9A26430717AF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDynamicFormTest.Shared", "..\BlazorDynamicFormTest\Shared\BlazorDynamicFormTest.Shared.csproj", "{E3B44611-A264-47A1-A8CE-C27A452D03AF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeAnnotationParser.Test", "..\TypeAnnotationParser.Test\TypeAnnotationParser.Test.csproj", "{8B24D6F0-7252-4E21-BDB9-37A57A19693F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeAnnotationParser.Test", "..\TypeAnnotationParser.Test\TypeAnnotationParser.Test.csproj", "{8B24D6F0-7252-4E21-BDB9-37A57A19693F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,18 +25,10 @@ Global
 		{A09EFDFE-24D3-4505-8576-281B83F03217}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A09EFDFE-24D3-4505-8576-281B83F03217}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A09EFDFE-24D3-4505-8576-281B83F03217}.Release|Any CPU.Build.0 = Release|Any CPU
-		{400A278C-ADA9-47FF-BFFB-0FDCF7EC7B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{400A278C-ADA9-47FF-BFFB-0FDCF7EC7B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{400A278C-ADA9-47FF-BFFB-0FDCF7EC7B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{400A278C-ADA9-47FF-BFFB-0FDCF7EC7B30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{08A56C15-85C8-4471-9BAA-9A26430717AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08A56C15-85C8-4471-9BAA-9A26430717AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08A56C15-85C8-4471-9BAA-9A26430717AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08A56C15-85C8-4471-9BAA-9A26430717AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3B44611-A264-47A1-A8CE-C27A452D03AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3B44611-A264-47A1-A8CE-C27A452D03AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3B44611-A264-47A1-A8CE-C27A452D03AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3B44611-A264-47A1-A8CE-C27A452D03AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B24D6F0-7252-4E21-BDB9-37A57A19693F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B24D6F0-7252-4E21-BDB9-37A57A19693F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B24D6F0-7252-4E21-BDB9-37A57A19693F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,5 +36,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BFF2379-9067-4486-A1C6-72167B12A972}
 	EndGlobalSection
 EndGlobal
