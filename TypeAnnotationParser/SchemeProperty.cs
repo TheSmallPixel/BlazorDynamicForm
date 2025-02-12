@@ -23,19 +23,9 @@ public class AttributeScheme : Attribute
 	[YamlIgnore]
 	public override object TypeId => GetType();
 }
+public abstract class DynamicRendererComponent : AttributeScheme { }
 
-public class CodeEditorAttribute : AttributeScheme
-{
-	public CodeEditorAttribute(string lang)
-	{
-		Lang = lang;
-	}
-	public CodeEditorAttribute() { }
-
-	public string Lang { get; set; }
-}
-
-public class SelectBoxAttribute : AttributeScheme
+public class SelectBoxAttribute : DynamicRendererComponent
 {
 	public SelectBoxAttribute(string[] choices)
 	{

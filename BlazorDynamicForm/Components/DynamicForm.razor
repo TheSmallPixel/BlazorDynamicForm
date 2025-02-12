@@ -6,40 +6,39 @@
 
 <!-- A simple form element with an @onsubmit -->
 <form onsubmit="@HandleSubmitAsync" novalidate>
-	@if (Scheme?.Properties != null)
-	{
-		var componentType = Configuration.GetElement(Scheme, Scheme);
-		if (componentType is not null)
-		{
-			DataObject = (IDictionary<string, object>)Scheme.CreateOrValidateData(Scheme, DataObject);
-			var parameters = new Dictionary<string, object?>
-					{
-						["SchemeProperty"] = Scheme,
-						["SchemeModel"] = Scheme,
-						["PropertyName"] = Scheme.Name,
-						["IsFirst"] = true,
-						["Value"] = DataObject,
-						["ValueChanged"] = EventCallback.Factory.Create<object?>(this, OnChildValueChanged)
-					};
-			<ErrorBoundary>
-				<DynamicComponent Type="@componentType" Parameters="@parameters" />
-				<div class="alert alert-danger">
-					An error occurred in the child component.
-				</div>
-			</ErrorBoundary>
-		}
-		else
-		{
-			<p class="text-danger">No component found for this scheme.</p>
-		}
-	}
-	@SubmitTemplate
-	<button type="submit" class="btn btn-primary">Submit</button>
+    @if (Scheme?.Properties != null)
+    {
+        var componentType = Configuration.GetElement(Scheme, Scheme);
+        if (componentType is not null)
+        {
+            DataObject = (IDictionary<string, object>)Scheme.CreateOrValidateData(Scheme, DataObject);
+            var parameters = new Dictionary<string, object?>
+            {
+                ["SchemeProperty"] = Scheme,
+                ["SchemeModel"] = Scheme,
+                ["PropertyName"] = Scheme.Name,
+                ["IsFirst"] = true,
+                ["Value"] = DataObject,
+                ["ValueChanged"] = EventCallback.Factory.Create<object?>(this, OnChildValueChanged)
+            };
+            <ErrorBoundary>
+                <ChildContent>
+                    <DynamicComponent Type="@componentType" Parameters="@parameters" />
+                </ChildContent>
+                <ErrorContent Context="ex">
+                    <div class="alert alert-danger">
+                        An error occurred: @ex.Message
+                    </div>
+                </ErrorContent>
+            </ErrorBoundary>
+        }
+        else
+        {
+            <p class="text-danger">No component found for this scheme.</p>
+        }
+    }
+    @SubmitTemplate
 </form>
-
-<hr />
-<p>Debug view of current data:</p>
-<pre>@System.Text.Json.JsonSerializer.Serialize(DataObject, new System.Text.Json.JsonSerializerOptions { WriteIndented = true })</pre>
 
 @code {
 	// Holds your data, which can be shaped by ExpandoObject
@@ -50,7 +49,7 @@
 
 	[Parameter]
 	public RenderFragment SubmitTemplate { get; set; }
-	// The scheme that defines how the form should be built
+
 	[Parameter]
 	public required SchemeModel Scheme { get; set; }
 
@@ -63,27 +62,12 @@
 
 
 	private async Task HandleSubmitAsync()
-	{
-		// The @onsubmit handler won't do default form-post,
-		// but you can handle it here.
-		Console.WriteLine("Submitted form. Current data:");
-		Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(
-			DataObject, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+    {
 		await OnValidSubmit.InvokeAsync(DataObject);
-		// You could do any server call here, or trigger an EventCallback, etc.
-
-		// Or do your own logic: call a service, etc.
 	}
 
 	private void OnChildValueChanged(object? newValue)
 	{
-		// If it's truly your top-level object, you might just reassign:
-		// DataObject = (ExpandoObject)newValue;
-		//
-		// Or, if it's a sub-property, you might do some dictionary updates.
-
-		// For simplicity, let's assume the child is passing the entire
-		// updated ExpandoObject. Reassign:
 		if (newValue is IDictionary<string, object> updatedObj)
 		{
 			DataObject = updatedObj;

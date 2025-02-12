@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.Dynamic
+@using BlazorDynamicForm.Attributes
 @using BlazorDynamicForm.Components
 @using Newtonsoft.Json
 @using TypeAnnotationParser
@@ -11,131 +12,100 @@
 
 
 <DynamicForm Scheme="@_scheme" OnValidSubmit="@OnValidResult">
-	@*  <FieldTemplate Context="template">
-            @template.DynamicComponent
-        </FieldTemplate> *@
-	<SubmitTemplate>
-		<div class="col-12">
-			<button type="submit" class="btn btn-primary">Save</button>
-		</div>
-	</SubmitTemplate>
+    @*  <FieldTemplate Context="template">
+    @template.DynamicComponent
+    </FieldTemplate> *@
+    <SubmitTemplate>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </SubmitTemplate>
 </DynamicForm>
 
 @if (!string.IsNullOrEmpty(SerializedJson))
 {
-	<pre>@SerializedJson</pre>
+    <pre>@SerializedJson</pre>
 }
 
 @code {
-	string _rawScheme = @"references:
-  '#Cube':
-    name: Cube
-    type: Object
-    properties:
-      Value:
-        type: Integer
-        attributes:
-        - !SelectBox
-          options:
-          - 1
-          - 2
-  '#Test':
-    name: Test
-    type: Object
-    properties:
-      Name:
-        type: String
-        attributes:
-        - !CodeEditor
-          lang: chsarp
-      M1:
-        ref: '#Cube'
-      M3:
-        ref: '#Cube'
-      M4:
-        ref: '#Cube'
-      M2:
-        type: Array
-        indices:
-        - ref: '#Cube'
-name: Test
-type: Object
-properties:
-  Name:
-    type: String
-    attributes:
-    - !CodeEditor
-      lang: chsarp
-  M1:
-    ref: '#Cube'
-  M3:
-    ref: '#Cube'
-  M4:
-    ref: '#Cube'
-  M2:
-    type: Array
-    indices:
-    - ref: '#Cube'
-  Data:
-    ref: '#Test'
-  Data2:
-    type: Array
-    indices:
-    - ref: '#Test'
-";
 
-	void OnValidResult(IDictionary<string, object>? data)
-	{
-		if (data is not null)
-		{
-			// Serialize using Newtonsoft.Json
+    void OnValidResult(IDictionary<string, object>? data)
+    {
+        if (data is not null)
+        {
+            // Serialize using Newtonsoft.Json
             SerializedJson = JsonConvert.SerializeObject(data, Formatting.Indented);
             Console.WriteLine(SerializedJson);
-		}
-		else
-		{
+        }
+        else
+        {
             SerializedJson = "Form returned null data.";
-		}
-	}
+        }
+    }
 
-	private SchemeModel _scheme;
-	// ExpandoObject? data;
-	public string? SerializedJson = null;
+    private SchemeModel _scheme;
+    // ExpandoObject? data;
+    public string? SerializedJson = null;
+    public class Cube
+    {
+        [SelectBox(["1", "2"])]
+        public int Value { get; set; }
+    }
+    public class Test
+    {
+        [CodeEditor("chsarp")]
+        public string Name { get; set; }
 
-	protected override void OnParametersSet()
-	{
-		if (_scheme == null)
-		{
-			throw new InvalidOperationException($"{nameof(_scheme)} parameter is required.");
-		}
+        [TextArea()]
+        public string Message { get; set; }
+        // public Cube M1 { get; set; }
+        // public Cube M3 { get; set; }
+        // public Cube M4 { get; set; }
 
-		base.OnParametersSet();
-	}
-	protected override async Task OnInitializedAsync()
-	{
+        // public List<Cube> M2 { get; set; }
 
-		_scheme = CreateScheme(_rawScheme);
+        // public List<string> ListString { get; set; }
 
-			await base.OnInitializedAsync();
-	}
+        // public Test Data { get; set; }
 
-	public SchemeModel CreateScheme(string yaml)
-	{
-		List<Type> attributesTypes = new List<Type>()
-		{
-			typeof(CodeEditorAttribute),
-			typeof(SelectBoxAttribute),
-		};
+        // public List<Test> Data2 { get; set; }
+    }
+    protected override void OnParametersSet()
+    {
+        if (_scheme == null)
+        {
+            var config = new ParserConfiguration();
+            config.Attributes = new List<Annotation>() { };
+            var parser = new TypeAnnotationParser(config);
 
-		var deserializerBuilder = new DeserializerBuilder()
-			.WithNamingConvention(LowerCaseNamingConvention.Instance);
-		foreach (var attribute in attributesTypes)
-		{
-			deserializerBuilder.WithTagMapping("!" + attribute.Name.Replace("Attribute", ""), attribute);
-		}
-		var deserializer = deserializerBuilder.Build();
-		var schemeDeserialize = deserializer.Deserialize<SchemeModel>(yaml);
-		return schemeDeserialize;
-	}
+
+            _scheme = parser.Parse<Test>();
+        }
+
+        base.OnParametersSet();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    public SchemeModel CreateScheme(string yaml)
+    {
+        List<Type> attributesTypes = new List<Type>()
+        {
+            typeof(CodeEditorAttribute),
+            typeof(SelectBoxAttribute),
+        };
+
+        var deserializerBuilder = new DeserializerBuilder()
+            .WithNamingConvention(LowerCaseNamingConvention.Instance);
+        foreach (var attribute in attributesTypes)
+        {
+            deserializerBuilder.WithTagMapping("!" + attribute.Name.Replace("Attribute", ""), attribute);
+        }
+        var deserializer = deserializerBuilder.Build();
+        var schemeDeserialize = deserializer.Deserialize<SchemeModel>(yaml);
+        return schemeDeserialize;
+    }
 
 }
