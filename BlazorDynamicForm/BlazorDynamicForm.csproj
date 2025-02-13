@@ -6,11 +6,11 @@
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicForm</PackageProjectUrl>
-		<VersionPrefix>2.0.0</VersionPrefix>
+		<VersionPrefix>2.0.1</VersionPrefix>
 		<PackageTags>Blazor;Dynamic;Form;Syncfusion;Validation;</PackageTags>
 		<RepositoryUrl>https://github.com/TheSmallPixel</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<Copyright> Lorenzo Longiave(c) 2023</Copyright>
+		<Copyright> Lorenzo Longiave(c) 2025</Copyright>
 		<PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Title>Blazor Dynamic Form Generator</Title>
@@ -27,18 +27,19 @@
 		<PackageReference Include="BlazorMonaco" Version="3.3.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
-
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\TypeAnnotationParser\TypeAnnotationParser.csproj" />
+	<ItemGroup Condition="'$(Configuration)' != 'Debug'">
+		<PackageReference Include="TypeAnnotationParser" Version="1.0.1" />
 	</ItemGroup>
-
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+		<ProjectReference Include="..\TypeAnnotationParser\TypeAnnotationParser.csproj" />
+	</ItemGroup>
 	<ItemGroup>
-	  <None Update="README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Update="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>

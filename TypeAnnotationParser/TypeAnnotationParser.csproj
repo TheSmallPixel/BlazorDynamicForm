@@ -1,15 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <LangVersion>12</LangVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageProjectUrl>https://github.com/TheSmallPixel/SchemeTypeParser</PackageProjectUrl>
+		<LangVersion>12</LangVersion>
+		<VersionPrefix>1.0.1</VersionPrefix>
+		<RepositoryUrl>https://github.com/TheSmallPixel/SchemeTypeParser</RepositoryUrl>
+		<Copyright> Lorenzo Longiave(c) 2025</Copyright>
+		<RepositoryType>git</RepositoryType>
+		<Title>Scheme Type Parser</Title>
+		<Authors>Lorenzo Longiave</Authors>
+		<PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="YamlDotNet" Version="16.3.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="YamlDotNet" Version="16.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="README.md">
+	    <PackagePath>\</PackagePath>
+	    <Pack>True</Pack>
+	  </None>
+	</ItemGroup>
 
 </Project>

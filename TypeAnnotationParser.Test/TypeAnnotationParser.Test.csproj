@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlazorDynamicForm\BlazorDynamicForm.csproj" />
-    <ProjectReference Include="..\TypeAnnotationParser\TypeAnnotationParser.csproj" />
   </ItemGroup>
 
   <ItemGroup>
