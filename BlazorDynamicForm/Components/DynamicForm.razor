@@ -11,14 +11,14 @@
         var componentType = Configuration.GetElement(Scheme, Scheme);
         if (componentType is not null)
         {
-            DataObject = (IDictionary<string, object>)Scheme.CreateOrValidateData(Scheme, DataObject);
+            Data = (IDictionary<string, object>)Scheme.CreateOrValidateData(Scheme, Data);
             var parameters = new Dictionary<string, object?>
             {
                 ["SchemeProperty"] = Scheme,
                 ["SchemeModel"] = Scheme,
                 ["PropertyName"] = Scheme.Name,
                 ["IsFirst"] = true,
-                ["Value"] = DataObject,
+                ["Value"] = Data,
                 ["ValueChanged"] = EventCallback.Factory.Create<object?>(this, OnChildValueChanged)
             };
             <ErrorBoundary>
@@ -42,7 +42,8 @@
 
 @code {
 	// Holds your data, which can be shaped by ExpandoObject
-	private IDictionary<string, object> DataObject { get; set; } = new Dictionary<string, object>();
+    [Parameter]
+    public IDictionary<string, object> Data { get; set; }
 
 	[Parameter]
 	public EventCallback<IDictionary<string, object>?> OnValidSubmit { get; set; }
@@ -55,22 +56,26 @@
 
 	protected override void OnInitialized()
 	{
-		// If needed, initialize "DataObject" or "Scheme" from services, etc.
+		// If needed, initialize "Data" or "Scheme" from services, etc.
 		// This is just a placeholder for demonstration.
 		base.OnInitialized();
 	}
 
+    protected override void OnParametersSet()
+    {
+        Data ??= new Dictionary<string, object>();
+    }
 
 	private async Task HandleSubmitAsync()
     {
-		await OnValidSubmit.InvokeAsync(DataObject);
+		await OnValidSubmit.InvokeAsync(Data);
 	}
 
 	private void OnChildValueChanged(object? newValue)
 	{
 		if (newValue is IDictionary<string, object> updatedObj)
 		{
-			DataObject = updatedObj;
+			Data = updatedObj;
 		}
 		// Force a re-render if needed:
 		StateHasChanged();

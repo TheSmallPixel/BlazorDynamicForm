@@ -4,7 +4,7 @@
 @using Newtonsoft.Json
 @using TypeAnnotationParser
 
-<DynamicForm Scheme="@_scheme" OnValidSubmit="@OnValidResult">
+<DynamicForm Scheme="@_scheme" OnValidSubmit="@OnValidResult" Data="data" >
     <SubmitTemplate>
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Save</button>
@@ -18,6 +18,8 @@
 }
 
 @code {
+
+    Dictionary<string, object> data = new Dictionary<string, object>() { { "TTS", "Italian" }, { "Limit", 2f } };
 
     void OnValidResult(IDictionary<string, object>? data)
     {
