@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Reflection;
 using TypeAnnotationParser;
 
 namespace BlazorDynamicForm.Core
@@ -7,14 +6,11 @@ namespace BlazorDynamicForm.Core
     public class DynamicFormConfiguration(ILogger<DynamicFormConfiguration> logger)
     {
 
-
         public Dictionary<PropertyType, Type> RendererMappings { get; private set; } = new();
 
         public Dictionary<Type, Type> CustomAttributeRenderer { get; private set; } = new();
 
         public Dictionary<PropertyType, Type> CustomRenderer { get; private set; } = new();
-
-
 
         public void AddRenderer<R>(PropertyType type) where R : FormComponentBase
         {

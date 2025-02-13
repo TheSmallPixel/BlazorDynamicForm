@@ -6,19 +6,28 @@ using Microsoft.Extensions.Logging;
 using TypeAnnotationParser;
 using CodeEditorAttribute = BlazorDynamicForm.Attributes.CodeEditorAttribute;
 
-namespace BlazorDynamicForm.Utility;
+namespace BlazorDynamicForm;
 
-public static class Loader
+public static class Utility
 {
+    public static List<Type> DefaultComponents = new List<Type>
+    {
+             typeof(MultipleSelectAttribute),
+             typeof(TextAreaAttribute),
+             typeof(CodeEditorAttribute),
+
+    };
+
     public static IServiceCollection AddBlazorDynamicForm(this IServiceCollection services)
     {
         services.AddSingleton(serviceProvider =>
         {
             var logger = serviceProvider.GetRequiredService<ILogger<DynamicFormConfiguration>>();
             var config = new DynamicFormConfiguration(logger);
-            
 
-			config.AddRenderer<FloatComponent>(PropertyType.Float);
+            config.AddRenderer<EnumComponent>(PropertyType.Enum);
+            config.AddRenderer<DecimalComponent>(PropertyType.Decimal);
+            config.AddRenderer<FloatComponent>(PropertyType.Float);
             config.AddRenderer<IntComponent>(PropertyType.Integer);
             config.AddRenderer<StringComponent>(PropertyType.String);
 

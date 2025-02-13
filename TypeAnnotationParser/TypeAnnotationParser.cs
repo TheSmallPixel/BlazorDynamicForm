@@ -40,6 +40,11 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 		if (propertyInfo != null)
 			AssignAttributesToProperty(propertyInfo, schemeProperty);
 
+        if (schemeProperty.Type is PropertyType.Enum)
+        {
+            schemeProperty.Enum = Enum.GetNames(propertyType).ToList();
+        }
+
 		switch (schemeProperty.Type)
 		{
 			case PropertyType.Object:
@@ -131,8 +136,11 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 		if (type == typeof(double))
 			return PropertyType.Double;
 
-		// Check for various integer types.
-		if (type == typeof(byte) || type == typeof(sbyte) ||
+        if (type == typeof(decimal))
+            return PropertyType.Decimal;
+
+        // Check for various integer types.
+        if (type == typeof(byte) || type == typeof(sbyte) ||
 			type == typeof(short) || type == typeof(ushort) ||
 			type == typeof(int) || type == typeof(uint) ||
 			type == typeof(long) || type == typeof(ulong))

@@ -4,6 +4,7 @@ public enum PropertyType
 {
     Integer,
     String,
+    Decimal,
     Float,
     Double,
     Object,

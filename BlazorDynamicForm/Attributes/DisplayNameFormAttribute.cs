@@ -1,6 +1,8 @@
-﻿namespace BlazorDynamicForm.Attributes;
+﻿using TypeAnnotationParser;
 
-public class DisplayNameFormAttribute : DisplayFormAttribute
+namespace BlazorDynamicForm.Attributes;
+
+public class DisplayNameFormAttribute : AttributeScheme
 {
     public DisplayNameFormAttribute(string name)
     {

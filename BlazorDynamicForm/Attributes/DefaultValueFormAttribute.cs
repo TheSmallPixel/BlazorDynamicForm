@@ -1,6 +1,8 @@
-﻿namespace BlazorDynamicForm.Attributes;
+﻿using TypeAnnotationParser;
 
-public class DefaultValueFormAttribute : DisplayFormAttribute
+namespace BlazorDynamicForm.Attributes;
+
+public class DefaultValueFormAttribute : AttributeScheme
 {
     public DefaultValueFormAttribute(object defaultValue)
     {

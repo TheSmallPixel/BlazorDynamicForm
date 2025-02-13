@@ -1,5 +1,8 @@
-﻿namespace BlazorDynamicForm.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
+using TypeAnnotationParser;
 
-public class ReadonlyFormAttribute : DisplayFormAttribute
+namespace BlazorDynamicForm.Attributes;
+
+public class ReadonlyFormAttribute : AttributeScheme
 {
 }

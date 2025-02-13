@@ -11,12 +11,15 @@
 					<path d="M1 2.5a.5.5 0 0 1 .5-.5h3.797a.5.5 0 0 1 .439.26L11 13h3.5a.5.5 0 0 1 0 1h-3.797a.5.5 0 0 1-.439-.26L5 3H1.5a.5.5 0 0 1-.5-.5m10 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5" />
 				</svg>
 			</span>
-			<InputSelect @bind-Value="ValueChanged"  class="form-select form-control">
-				@foreach (var option in config.Options)
-				{
-					<option value="@option">@option</option>
-				}
-			</InputSelect>
+            <InputSelect @bind-Value="TypedValue" class="form-select form-control" >
+                @if (_config != null)
+                {
+                    @foreach (var option in _config.Options)
+                    {
+                        <option value="@option">@option</option>
+                    }
+                }
+            </InputSelect>
 		</div>
 	</div>
 </div>
@@ -26,16 +29,16 @@
 		get => Value?.ToString() ?? string.Empty;
 		set => Value = value;
 	}
-	private MultipleSelectAttribute config;
+	private MultipleSelectAttribute? _config;
 
 
 
 	protected override async Task OnParametersSetAsync()
 	{
-		config = SchemeProperty.Attributes.OfType<MultipleSelectAttribute>().FirstOrDefault();
-		if (string.IsNullOrWhiteSpace(TypedValue))
+		_config = SchemeProperty.Attributes?.OfType<MultipleSelectAttribute>().FirstOrDefault();
+		if (string.IsNullOrEmpty(TypedValue))
 		{
-			TypedValue = config.Options.First();
+			TypedValue = _config.Options.First();
 		}
 	}
 }

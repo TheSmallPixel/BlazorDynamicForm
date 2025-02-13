@@ -1,15 +1,8 @@
 ﻿@page "/"
-@using System.Dynamic
 @using BlazorDynamicForm.Attributes
 @using BlazorDynamicForm.Components
 @using Newtonsoft.Json
 @using TypeAnnotationParser
-@using YamlDotNet.Serialization
-@using YamlDotNet.Serialization.NamingConventions
-
-
-@inject HttpClient Http
-
 
 <DynamicForm Scheme="@_scheme" OnValidSubmit="@OnValidResult">
     <SubmitTemplate>
@@ -48,24 +41,37 @@
         [SelectBox(["1", "2"])]
         public int Value { get; set; }
     }
+
+    public enum Colors
+    {
+        Black,
+        Red,
+        Yellow
+    };
     public class Test
     {
+        [MultipleSelect("Italian", "Mandarino", "Ananas")]
+        public string TTS { get; set; }
+
         [CodeEditor("chsarp")]
         public string Name { get; set; }
 
         [TextArea()]
         public string Message { get; set; }
-        // public Cube M1 { get; set; }
-        // public Cube M3 { get; set; }
-        // public Cube M4 { get; set; }
 
-        // public List<Cube> M2 { get; set; }
+        [Placeholder("This should be a prova")]
+        public string Message2 { get; set; }
 
-        // public List<string> ListString { get; set; }
+        public float Limit { get; set; }
 
-        // public Test Data { get; set; }
+        [Range(0,100)]
+        public int LimitInt { get; set; }
 
-        // public List<Test> Data2 { get; set; }
+
+        public decimal DecimalLimit { get; set; }
+
+        public Colors Colors { get; set; }
+
     }
     protected override void OnParametersSet()
     {
@@ -74,7 +80,6 @@
             var config = new ParserConfiguration();
             config.Attributes = new List<Annotation>() { };
             var parser = new TypeAnnotationParser(config);
-
 
             _scheme = parser.Parse<Test>();
         }
@@ -86,23 +91,5 @@
         await base.OnInitializedAsync();
     }
 
-    public SchemeModel CreateScheme(string yaml)
-    {
-        List<Type> attributesTypes = new List<Type>()
-        {
-            typeof(CodeEditorAttribute),
-            typeof(SelectBoxAttribute),
-        };
-
-        var deserializerBuilder = new DeserializerBuilder()
-            .WithNamingConvention(LowerCaseNamingConvention.Instance);
-        foreach (var attribute in attributesTypes)
-        {
-            deserializerBuilder.WithTagMapping("!" + attribute.Name.Replace("Attribute", ""), attribute);
-        }
-        var deserializer = deserializerBuilder.Build();
-        var schemeDeserialize = deserializer.Deserialize<SchemeModel>(yaml);
-        return schemeDeserialize;
-    }
-
+  
 }
