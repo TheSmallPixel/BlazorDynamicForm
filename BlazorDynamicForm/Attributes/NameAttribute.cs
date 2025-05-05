@@ -4,7 +4,9 @@ namespace BlazorDynamicForm.Attributes;
 
 public class NameAttribute : AttributeScheme
 {
-    public NameAttribute(string name)
+	public NameAttribute() { }
+
+	public NameAttribute(string name)
     {
         Name = name;
     }
