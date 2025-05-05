@@ -15,6 +15,7 @@ public static class Utility
              typeof(MultipleSelectAttribute),
              typeof(TextAreaAttribute),
              typeof(CodeEditorAttribute),
+             typeof(NameAttribute)
 
     };
 

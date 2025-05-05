@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicForm</PackageProjectUrl>
-		<VersionPrefix>2.0.2</VersionPrefix>
+		<VersionPrefix>2.0.3</VersionPrefix>
 		<PackageTags>Blazor;Dynamic;Form;Syncfusion;Validation;</PackageTags>
 		<RepositoryUrl>https://github.com/TheSmallPixel</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>

@@ -3,6 +3,7 @@
 @using BlazorDynamicForm.Components
 @using Newtonsoft.Json
 @using TypeAnnotationParser
+@using TypeAnnotationParser.Serialization
 
 <DynamicForm Scheme="@_scheme" OnValidSubmit="@OnValidResult" Data="data" >
     <SubmitTemplate>
@@ -82,8 +83,8 @@
             var config = new ParserConfiguration();
             config.Attributes = new List<Annotation>() { };
             var parser = new TypeAnnotationParser(config);
-
-            _scheme = parser.Parse<Test>();
+            var schme = Scheme.GetSchemeFromYaml(BlazorDynamicForm.Utility.DefaultComponents, customConfig);
+            _scheme = schme; //parser.Parse<Test>();
         }
 
         base.OnParametersSet();
@@ -93,5 +94,6 @@
         await base.OnInitializedAsync();
     }
 
+    string customConfig = "references:\r\n  '#SwitchOption':\r\n    name: SwitchOption\r\n    type: Object\r\n    properties:\r\n      OutputName:\r\n        type: String\r\n      ComparatorType:\r\n        type: String\r\n        attributes:\r\n        - name: ComparatorType\r\n        - !MultipleSelect\r\n          options:\r\n          - '>'\r\n          - <\r\n          - Regex\r\n          - Contains\r\n          - Equals\r\n      Value:\r\n        type: String\r\n        attributes:\r\n        - name: Value\r\nname: SwitchTask\r\ntype: Object\r\nproperties:\r\n  Variable:\r\n    type: String\r\n    attributes:\r\n    - name: Variable\r\n  StringNormalization:\r\n    type: String\r\n    attributes:\r\n    - name: String Normalization\r\n    - !MultipleSelect\r\n      options:\r\n      - None\r\n      - ToLowerCase\r\n      - ToUpperCase\r\n  SecondaryStringNormalization:\r\n    type: String\r\n    attributes:\r\n    - name: Secondary String Normalization\r\n    - !MultipleSelect\r\n      options:\r\n      - None\r\n      - Normalize Remove Accents/Diacritics\r\n      - ToUpperCase\r\n  Options:\r\n    type: Array\r\n    attributes:\r\n    - name: Options\r\n    indices:\r\n    - ref: '#SwitchOption'\r\n";
   
 }
