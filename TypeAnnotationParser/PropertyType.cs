@@ -11,5 +11,6 @@ public enum PropertyType
     Array,
     File,
     Dictionary,
-    Enum
+    Enum,
+    Boolean
 }

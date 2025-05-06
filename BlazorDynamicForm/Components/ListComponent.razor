@@ -20,79 +20,88 @@
 			</Button>
 		</div>
 	</div>
-	<div style="padding-bottom: 6px; padding-top: 6px;">
-		@{
 
-			var indexScheme = SchemeProperty.Indices.SingleOrDefault();
-			if (indexScheme is null)
+	@{
+
+		var indexScheme = SchemeProperty.Indices.SingleOrDefault();
+		if (indexScheme is null)
+		{
+			<div class="alert alert-warning">
+				No itemProperty found in <strong>SchemeProperty.Indices</strong>.
+			</div>
+		}
+		else
+		{
+			var componentType = Configuration.GetElement(SchemeModel, indexScheme);
+			if (componentType is null)
 			{
-				<div class="alert alert-warning">
-					No itemProperty found in <strong>SchemeProperty.Indices</strong>.
+				<div class="text-muted">
+					No renderer for property '@indexScheme' of type '@indexScheme.Type'
 				</div>
 			}
 			else
 			{
-				var componentType = Configuration.GetElement(SchemeModel, indexScheme);
-				if (componentType is null)
+				if (TypedValue.Count != 0)
 				{
-					<div class="text-muted">
-						No renderer for property '@indexScheme' of type '@indexScheme.Type'
-					</div>
-				}
-				else
-				{
-					for (int i = 0; i < TypedValue.Count; i++)
-					{
-						var guid = Guid.NewGuid();
-						var callback = EventCallback.Factory.Create<object?>(this, (object? newVal) =>
-						{
-							var index = TypedValue.IndexOf(ListReference[guid]);
-							// Your update logic here
-							ListReference[guid] = newVal;
-							TypedValue[index] = newVal;
+					<div style="padding-bottom: 6px; padding-top: 6px; max-height:400px; overflow-y:auto; overflow-x: hidden;">
+						@{
+							for (int i = 0; i < TypedValue.Count; i++)
+							{
+								var guid = Guid.NewGuid();
+								var callback = EventCallback.Factory.Create
+								<object?>
+								(this, (object? newVal) =>
+								{
+									var index = TypedValue.IndexOf(ListReference[guid]);
+									// Your update logic here
+									ListReference[guid] = newVal;
+									TypedValue[index] = newVal;
 
-						});
-						ListReference[guid] = TypedValue[i];
-						var parameters = new Dictionary<string, object?>
-						{
-							["SchemeProperty"] = indexScheme,
-							["SchemeModel"] = SchemeModel,
-							["PropertyName"] = $"Item {i}",
-							["IsFirst"] = false,
-							["Value"] = ListReference[guid],
-							["ValueChanged"] = callback
-						};
+								});
+								ListReference[guid] = TypedValue[i];
+								var parameters = new Dictionary
+								<string, object?>
+							{
+								["SchemeProperty"] = indexScheme,
+								["SchemeModel"] = SchemeModel,
+								["PropertyName"] = $"Item {i}",
+								["IsFirst"] = false,
+								["Value"] = ListReference[guid],
+								["ValueChanged"] = callback
+							};
 
-						<div @key="guid" class="row">
-							<div class="col-auto d-flex justify-content-center align-items-center ms-3">
-								<i>
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-										<path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
-									</svg>
-								</i>
-							</div>
-							<div class="col">
-								<DynamicComponent Type="@componentType" Parameters="@parameters" />
-							</div>
-							<div class="col-auto ps-0">
-								<button @onclick="() => { RemoveItem(guid); }" type="button" class="btn btn-danger">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-										<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-										<path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-									</svg>
-								</button>
-							</div>
-						</div>
-						@if (i + 1 < TypedValue.Count)
-						{
-							<hr style="border: 0; height: 0.1px; margin-left: 15px; margin-right: 15px;margin-top: 6px;margin-bottom: 6px;">
+								<div @key="guid" class="row align-items-center">
+									<div class="col-auto ms-3">
+										<i>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+												<path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+											</svg>
+										</i>
+									</div>
+									<div class="col">
+										<DynamicComponent Type="@componentType" Parameters="@parameters" />
+									</div>
+									<div class="col-auto ps-0">
+										<button @onclick="() => { RemoveItem(guid); }" type="button" class="btn btn-light btn-sm" style="color: #827f7f;background-color: #f8f9fa00;border-color: #f8f9fa00;">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+												<path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+											</svg>
+										</button>
+									</div>
+								</div>
+								@if (i + 1 < TypedValue.Count)
+								{
+									<hr style="border: 0; height: 0.1px; margin-left: 15px; margin-right: 15px; margin-top: 6px; margin-bottom: 6px;">
+								}
+							}
 						}
-					}
+					</div>
 				}
 			}
 		}
-	</div>
+	}
 </div>
+
 
 @code {
 	private Dictionary<Guid, object> ListReference = new Dictionary<Guid, object>();

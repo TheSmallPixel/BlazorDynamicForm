@@ -15,7 +15,8 @@ public static class Utility
              typeof(MultipleSelectAttribute),
              typeof(TextAreaAttribute),
              typeof(CodeEditorAttribute),
-             typeof(NameAttribute)
+             typeof(NameAttribute),
+             typeof(GridAttribute)
 
     };
 
@@ -30,7 +31,8 @@ public static class Utility
             config.AddRenderer<DecimalComponent>(PropertyType.Decimal);
             config.AddRenderer<FloatComponent>(PropertyType.Float);
             config.AddRenderer<IntComponent>(PropertyType.Integer);
-            config.AddRenderer<StringComponent>(PropertyType.String);
+            config.AddRenderer<BooleanComponent>(PropertyType.Boolean);
+			config.AddRenderer<StringComponent>(PropertyType.String);
 
             config.AddRenderer<ObjectComponent>(PropertyType.Object);
             config.AddRenderer<ListComponent>(PropertyType.Array);

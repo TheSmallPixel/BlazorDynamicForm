@@ -1,76 +1,60 @@
-﻿@using BlazorDynamicForm.Core
+﻿@using BlazorDynamicForm.Attributes
+@using BlazorDynamicForm.Core
 @using Microsoft.AspNetCore.Components.Forms
 @using TypeAnnotationParser
+@using BlazorDynamicForm.AttributesComponents
 @inject DynamicFormConfiguration Configuration
 @inherits BlazorDynamicForm.Core.FormComponentBase
 
-@if (_status || IsFirst)
-{
-	<div class="rounded border p-0 shadow-sm">
-		<div class="row">
-			<div class="col">
-				
 
-				@{
-					if (!IsFirst)
-					{
-						<div class="row pb-2">
-							<div class="col input-group">
-								<span class="input-group-text">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
-										<path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z" />
-									</svg>
-								</span>
-								<span class="input-group-text flex-grow-1">@PropertyName</span>
-								<Button @onclick="Close" class="btn btn-outline-secondary" type="button">Close</Button>
-							</div>
-						</div>
-					}
+<BoxComponent BoxAttribute="_boxAttribute" PropertyName="@PropertyName">
+	<div class="row g-2">
+		@{
 
-
-					if (Value is not IDictionary<string, object> dict)
+			if (Value is not IDictionary<string, object> dict)
+			{
+				<div class="alert alert-danger">
+					<strong>Value</strong> is not a dictionary.
+					Cannot render properties.
+				</div>
+			}
+			else
+			{
+				SchemeProperty objectScheme = SchemeProperty;
+				if (!string.IsNullOrEmpty(SchemeProperty.Ref))
+				{
+					if (!SchemeModel.References.TryGetValue(SchemeProperty.Ref, out objectScheme))
 					{
 						<div class="alert alert-danger">
-							<strong>Value</strong> is not a dictionary.
+							<strong>Ref</strong> not found.
 							Cannot render properties.
 						</div>
 					}
-					else
+				}
+
+				if (objectScheme?.Properties != null)
+				{
+
+					foreach (var (propertyName, lookupSchemaProperty) in objectScheme.Properties)
 					{
-						SchemeProperty objectScheme = SchemeProperty;
-						if (!string.IsNullOrEmpty(SchemeProperty.Ref))
+						var propertySchema = Configuration.ResolveReference(SchemeModel, lookupSchemaProperty);
+						var componentType = Configuration.GetElement(SchemeModel, propertySchema);
+						// If no component type found, skip or show a message
+						if (componentType is null)
 						{
-							if (!SchemeModel.References.TryGetValue(SchemeProperty.Ref, out objectScheme))
-							{
-								<div class="alert alert-danger">
-									<strong>Ref</strong> not found.
-									Cannot render properties.
-								</div>
-							}
+							<div class="text-muted">
+								No renderer for property '@propertyName' of type '@propertySchema.Type'
+							</div>
+							continue;
 						}
 
-						if (objectScheme?.Properties != null)
+						var callback = EventCallback.Factory.Create<object?>
+						(this, (object? newVal) =>
 						{
-							foreach (var (propertyName, lookupSchemaProperty) in objectScheme.Properties)
-							{
-								var propertySchema = Configuration.ResolveReference(SchemeModel, lookupSchemaProperty);
-								var componentType = Configuration.GetElement(SchemeModel, propertySchema);
-								// If no component type found, skip or show a message
-								if (componentType is null)
-								{
-									<div class="text-muted">
-										No renderer for property '@propertyName' of type '@propertySchema.Type'
-									</div>
-									continue;
-								}
-
-								var callback = EventCallback.Factory.Create<object?>
-								(this, (object? newVal) =>
-								{
-									// Your update logic here
-									dict[propertyName] = newVal;
-								});
-								var parameters = new Dictionary<string, object?>
+							// Your update logic here
+							dict[propertyName] = newVal;
+						});
+						var parameters = new Dictionary<string, object?>
 							{
 								["SchemeProperty"] = propertySchema,
 								["SchemeModel"] = SchemeModel,
@@ -79,43 +63,31 @@
 								["Value"] = dict[propertyName],
 								["ValueChanged"] = callback
 							};
-								<div class="row ps-3">
-									<div class="col pb-2">
-										<DynamicComponent Type="@componentType" Parameters="@parameters" />
-									</div>
-								</div>
-							}
-						}
-						else
-						{
-							<div class="alert alert-danger">
-								<strong>Properties</strong> not found.
-							</div>
-						}
+						var grid = propertySchema.Attributes?.OfType<GridAttribute>().FirstOrDefault() ?? new GridAttribute(12);
+
+						var size = "col-md-" + grid.Size;
+						<div class="@size">
+							<DynamicComponent Type="@componentType" Parameters="@parameters" />
+						</div>
+
+
 					}
+
 				}
-			</div>
-		</div>
+				else
+				{
+					<div class="alert alert-danger">
+						<strong>Properties</strong> not found.
+					</div>
+				}
+			}
+		}
 	</div>
-}
-else
-{
-	<div class="row">
-		<div class="col input-group">
-			<span class="input-group-text">
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
-					<path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z" />
-				</svg>
-			</span>
-			<span class="input-group-text flex-grow-1">@PropertyName</span>
-			<Button @onclick="Open" class="btn btn-outline-secondary" type="button">Open</Button>
-		</div>
-	</div>
-}
+</BoxComponent>
 @code {
 	private bool _status = false;
 
-
+	private BoxAttribute _boxAttribute;
 	private void Open()
 	{
 
@@ -126,4 +98,10 @@ else
 	{
 		_status = false;
 	}
+
+	protected override async Task OnParametersSetAsync()
+	{
+		_boxAttribute = SchemeProperty.Attributes?.OfType<BoxAttribute>().FirstOrDefault() ?? BoxAttribute.Instance;
+	}
+
 }

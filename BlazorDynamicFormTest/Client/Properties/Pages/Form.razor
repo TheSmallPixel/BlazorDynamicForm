@@ -76,6 +76,44 @@
         public Colors Colors { get; set; }
 
     }
+
+    public class SwitchTask 
+    {
+
+	    [Name("Variable"), Label("Variabile")]
+	    public string Variable { get; set; }
+
+
+        [Name("Outputs"), Grid(6)]
+	    public List<SwitchOutput> Outputs { get; set; }
+
+	    [Name("Outputs"), Grid(6)]
+	    public List<SwitchOutput> OutputsDuo { get; set; }
+
+	    [Name("Outputs"), Grid(8)]
+	    public List<SwitchOutput> Outputsthree { get; set; }
+
+	    [Name("Outputs"), Grid(4)]
+	    public List<SwitchOutput> OutputsFour { get; set; }
+    }
+    public class SwitchOutput
+    {
+        [Name("Output"), Label("Output", LabelAttribute.LabelPosition.Inline)]
+	    public string OutputName { get; set; }
+
+        [Box(BoxAttribute.BoxVisibility.None)]
+	    public List<SwitchOption> Options { get; set; }
+
+	    [Name("Is default")]
+	    public bool IsDefault { get; set; }
+    }
+    public class SwitchOption
+    {
+	    [Name("Comparator Type"), MultipleSelect(new[] { "Equals", "Regex", "Contains", ">", "<" }), Grid(4)]
+	    public string ComparatorType { get; set; }
+	    [Name("Value"),Grid(8)]
+	    public string Value { get; set; }
+    }
     protected override void OnParametersSet()
     {
         if (_scheme == null)
@@ -84,7 +122,7 @@
             config.Attributes = new List<Annotation>() { };
             var parser = new TypeAnnotationParser(config);
             var schme = Scheme.GetSchemeFromYaml(BlazorDynamicForm.Utility.DefaultComponents, customConfig);
-            _scheme = schme; //parser.Parse<Test>();
+            _scheme = parser.Parse<SwitchTask>();
         }
 
         base.OnParametersSet();

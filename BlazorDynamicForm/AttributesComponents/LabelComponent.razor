@@ -1,0 +1,33 @@
+﻿@using BlazorDynamicForm.Attributes
+<div class="row">
+	<div class="col-12">
+		@if (LabelInfo.Position == LabelAttribute.LabelPosition.Top)
+		{
+			<label for="@PropertyName" class="form-label">@LabelInfo.Label</label>
+			<div class="">
+				@ChildContent
+			</div>
+		}
+		@if (LabelInfo.Position == LabelAttribute.LabelPosition.Inline)
+		{
+			<div class="row">
+				<label for="@PropertyName" class="col-sm-2 col-form-label">@LabelInfo.Label</label>
+				<div class="col-sm-10">
+					@ChildContent
+				</div>
+			</div>
+		}
+		@if (LabelInfo.Position == LabelAttribute.LabelPosition.None)
+		{
+			@ChildContent
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter] public LabelAttribute? LabelInfo { get; set; }
+
+	[Parameter] public RenderFragment? ChildContent { get; set; }
+
+	[Parameter] public string PropertyName { get; set; }
+}

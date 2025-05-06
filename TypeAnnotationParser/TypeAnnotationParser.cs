@@ -125,6 +125,9 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 		if (type.IsEnum)
 			return PropertyType.Enum;
 
+		if (type == typeof(bool))
+			return PropertyType.Boolean;
+
 		// Handle the string type.
 		if (type == typeof(string))
 			return PropertyType.String;

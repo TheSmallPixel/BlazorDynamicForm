@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using BlazorDynamicForm.Attributes
+@inherits BlazorDynamicForm.Core.FormComponentBase
+
+<div class="row">
+    <div class="col-auto">
+	    <div class="form-check form-switch">
+		    <InputCheckbox class="form-check-input" @bind-Value="TypedValue" type="checkbox" id="flexSwitchCheckDefault"/>
+		    <label class="form-check-label" for="flexSwitchCheckDefault">@PropertyName</label>
+	    </div>
+    </div>
+</div>
+@code {
+
+    private bool TypedValue
+    {
+        get => Convert.ToBoolean(Value);
+        set => Value = value;
+    }
+
+}

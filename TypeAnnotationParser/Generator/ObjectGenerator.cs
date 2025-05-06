@@ -30,6 +30,8 @@ namespace BlazorDynamicForm
 
             switch (prop.Type.Value)
             {
+                case PropertyType.Boolean:
+	                return data is bool ? data : false;
                 case PropertyType.Integer:
                     // If 'data' is an integer, keep it; otherwise set default
                     return data is int ? data : 0;
