@@ -16,7 +16,9 @@ public static class Utility
              typeof(TextAreaAttribute),
              typeof(CodeEditorAttribute),
              typeof(NameAttribute),
-             typeof(GridAttribute)
+             typeof(GridAttribute),
+             typeof(BoxAttribute),
+             typeof(LabelAttribute)
 
     };
 

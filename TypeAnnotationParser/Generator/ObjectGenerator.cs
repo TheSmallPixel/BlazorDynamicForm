@@ -1,4 +1,5 @@
-﻿using TypeAnnotationParser;
+﻿using Newtonsoft.Json.Linq;
+using TypeAnnotationParser;
 
 namespace BlazorDynamicForm
 {
@@ -78,7 +79,8 @@ namespace BlazorDynamicForm
         )
         {
             // Make sure we have a dictionary
-            var dict = data as Dictionary<string, object?>;
+            var dict = data as IDictionary<string, object?>;
+          
             if (dict == null)
             {
                 dict = new Dictionary<string, object?>();
@@ -117,7 +119,8 @@ namespace BlazorDynamicForm
         )
         {
             var list = data as List<object?>;
-            if (list == null)
+         
+			if (list == null)
             {
                 list = new List<object?>();
             }
@@ -171,14 +174,22 @@ namespace BlazorDynamicForm
         {
             // We expect a dictionary of <string, object?>
             var dict = data as Dictionary<string, object?>;
+           
+
+            if (dict is null && data is JObject jobj)
+            {
+	            dict  = jobj.ToObject<Dictionary<string, object>>();
+
+			}
+
             if (dict == null)
             {
-                dict = new Dictionary<string, object?>();
+	            dict = new Dictionary<string, object?>();
             }
 
-            // If you want to auto-create one key-value pair
-            // if none exists and options.CreateDictionaryElement == true:
-            if (options.CreateDictionaryElement && dict.Count == 0 && prop.Properties != null && prop.Properties.Count == 2)
+			// If you want to auto-create one key-value pair
+			// if none exists and options.CreateDictionaryElement == true:
+			if (options.CreateDictionaryElement && dict.Count == 0 && prop.Properties != null && prop.Properties.Count == 2)
             {
                 // Typically for dictionary, you have something like:
                 //   prop.Properties["key"] = <key type>

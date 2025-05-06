@@ -27,7 +27,7 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 
 	private SchemeProperty AddFormProperty(SchemeModel scheme, SchemeProperty schemeProperty, Type propertyType, uint depth = 0, PropertyInfo? propertyInfo = null)
 	{
-		depth+=1;
+		depth += 1;
 		if (depth >= 20)
 			return schemeProperty;
 		schemeProperty.Type = DeterminePropertyType(propertyType);
@@ -40,10 +40,10 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 		if (propertyInfo != null)
 			AssignAttributesToProperty(propertyInfo, schemeProperty);
 
-        if (schemeProperty.Type is PropertyType.Enum)
-        {
-            schemeProperty.Enum = Enum.GetNames(propertyType).ToList();
-        }
+		if (schemeProperty.Type is PropertyType.Enum)
+		{
+			schemeProperty.Enum = Enum.GetNames(propertyType).ToList();
+		}
 
 		switch (schemeProperty.Type)
 		{
@@ -51,12 +51,18 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 				{
 					foreach (var propInfo in propertyType.GetProperties())
 					{
+						var attributes = propInfo.GetCustomAttributes(typeof(AttributeScheme), true).Cast<AttributeScheme>().ToList();
+						var isSpecial = (attributes.Any());
 						var keyProp = GetUniquePropertyKey(propInfo.PropertyType);
+						if (isSpecial)
+						{
+							keyProp += $"#{schemeProperty.Name}";
+						}
 						if (!scheme.References.TryGetValue(keyProp, out var objectPropertyScheme))
 						{
 							if (DeterminePropertyType(propInfo.PropertyType) is PropertyType.Object)
 							{
-								scheme.References.TryAdd(keyProp, new SchemeProperty(){Type = PropertyType.Object});
+								scheme.References.TryAdd(keyProp, new SchemeProperty() { Type = PropertyType.Object });
 							}
 							objectPropertyScheme = AddFormProperty(scheme, new SchemeProperty(), propInfo.PropertyType, depth, propInfo);
 							if (objectPropertyScheme.Type is PropertyType.Object)
@@ -72,6 +78,7 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 						{
 							schemeProperty.Properties.Add(propInfo.Name, objectPropertyScheme);
 						}
+
 					}
 					break;
 				}
@@ -83,7 +90,7 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 						var keyProp = GetUniquePropertyKey(indexType);
 						if (!scheme.References.TryGetValue(keyProp, out var objectPropertyScheme))
 						{
-							
+
 							objectPropertyScheme = AddFormProperty(scheme, new SchemeProperty(), indexType, depth);
 							if (objectPropertyScheme.Type is PropertyType.Object)
 								scheme.References.Add(keyProp, objectPropertyScheme);
@@ -139,11 +146,11 @@ public class TypeAnnotationParser(ParserConfiguration configuration)
 		if (type == typeof(double))
 			return PropertyType.Double;
 
-        if (type == typeof(decimal))
-            return PropertyType.Decimal;
+		if (type == typeof(decimal))
+			return PropertyType.Decimal;
 
-        // Check for various integer types.
-        if (type == typeof(byte) || type == typeof(sbyte) ||
+		// Check for various integer types.
+		if (type == typeof(byte) || type == typeof(sbyte) ||
 			type == typeof(short) || type == typeof(ushort) ||
 			type == typeof(int) || type == typeof(uint) ||
 			type == typeof(long) || type == typeof(ulong))
