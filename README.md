@@ -12,7 +12,7 @@ A lightweight, flexible form generator for Blazor applications that creates dyna
 ## Installation
 
 ```bash
-dotnet add package BlazorDynamicForm --version 2.0.4
+dotnet add package BlazorDynamicForm 
 ```
 
 ## Quick Start
