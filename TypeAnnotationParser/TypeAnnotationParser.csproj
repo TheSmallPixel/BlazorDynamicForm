@@ -7,7 +7,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/TheSmallPixel/SchemeTypeParser</PackageProjectUrl>
 		<LangVersion>12</LangVersion>
-		<VersionPrefix>1.0.1</VersionPrefix>
+		<VersionPrefix>1.0.2</VersionPrefix>
 		<RepositoryUrl>https://github.com/TheSmallPixel/SchemeTypeParser</RepositoryUrl>
 		<Copyright> Lorenzo Longiave(c) 2025</Copyright>
 		<RepositoryType>git</RepositoryType>
