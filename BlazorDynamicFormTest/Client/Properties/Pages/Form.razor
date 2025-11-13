@@ -73,6 +73,8 @@
 		[Range(0, 100)]
 		public int LimitInt { get; set; }
 
+		[CodeEditor("javascript")]
+		public string JSCode { get; set; }
 
 		public decimal DecimalLimit { get; set; }
 
@@ -146,8 +148,8 @@
 			{
 				_formData = new Dictionary<string, object>();
 			}
-			_scheme = parser.Parse<SwitchTask>();
-			var schemeYaml = Scheme.GetYamlFromScheme<SwitchTask>(BlazorDynamicForm.Utility.DefaultComponents);
+			_scheme = parser.Parse<Test>();
+			var schemeYaml = Scheme.GetYamlFromScheme<Test>(BlazorDynamicForm.Utility.DefaultComponents);
 			Console.WriteLine(schemeYaml);
 		}
 

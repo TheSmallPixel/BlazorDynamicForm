@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/TheSmallPixel/BlazorDynamicForm</PackageProjectUrl>
-		<VersionPrefix>2.0.5</VersionPrefix>
+		<VersionPrefix>2.1.0</VersionPrefix>
 		<PackageTags>Blazor;Dynamic;Form;Syncfusion;Validation;</PackageTags>
 		<RepositoryUrl>https://github.com/TheSmallPixel</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -24,9 +24,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BlazorMonaco" Version="3.3.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
+		<PackageReference Include="BlazorMonaco" Version="3.4.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.22" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' != 'Debug'">
